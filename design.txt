@@ -50,8 +50,12 @@ Ideas for personal expansion:
         Attack armor
     Introduce environmental hazards
         poison gas - could require gas mask item to traverse
+        traps - may require timing to avoid, but could also damage/kill monsters
     Add a scoring mechanism
+    Add gameplay music and sound fx
+
     Introduce save/load functionality
     Look into a shift into real-time gameplay instead of turn-based
     If possible, look into Bevy game engine for possible improvements
     Flesh out story of the game with intro screen and outro screen
+    

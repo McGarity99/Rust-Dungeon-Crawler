@@ -1,0 +1,57 @@
+Project Name: Relic
+
+Short Description:
+    A dungeon crawler with procedurally generated levels, monsters of increasing difficulty,
+    and turn-based movement.
+
+Story:
+    For generations, the city of Mharnem has paid faithful tribute to the gods. Countless festivals,
+    sacrifices, and the like have been held in the name of the Qentyoi - the gods of Earth. Despite all this,
+    the city now finds itself in a perilous position when pestilence strikes the people, debilitating or killing many.
+    Those that manage to avoid infection find themselves set upon by horrendous creatures. Hushed whispers among the city's 
+    clergy speak of a forgotten tome of immense power, said to contain knowledge transcribed by Anthrophulos himself and
+    hidden in the ancient catacombs beneath the city.
+    You don't know if the book exists, but your townsfolk are dying and their prayers are unanswered. You decide to venture into
+    the catacombs yourself and return with the answer to Mharnem's plight or die an honorable death...
+
+Basic Game Loops:
+    Enter catacomb level
+    Explore, revealing the map
+    Encounter enemies to fight/flee
+    Find power-ups and use them to strengthen the player
+    Locate the exit to the level, repeat
+
+Minimum Viable Product:
+    Create a basic catacomb map
+    Place the player and let them move around
+    Spawn monsters, draw them, and let the player kill them by walking into them
+    Add health and a combat system that uses it
+    Add healing potions
+    Display a "Game Over" screen when the player dies
+    Add the Book of Anthrophulos to the level and let the player win by touching it 
+
+Stretch Goals:
+    Add fields-of-view
+    Add more intricate dungeon designs
+    Add dungeon themes 
+    Add multiple layers to the catacombs, with the Book in the last one
+    Add varied weapons to the game 
+    Move to a data-driven design for spawning enemies 
+    Consider some visual effects to make combat more visceral
+    Consider keeping score/time limit
+
+Ideas for personal expansion:
+    Change overall theme from fantasy to sci-fi/horror
+    Increase variety of enemies
+    Introduce locked doors and corresponding keys
+    Introduce more items:
+        NV goggles: increase player FOV and apply green tint to environment
+        Speed enhancement
+        Attack armor
+    Introduce environmental hazards
+        poison gas - could require gas mask item to traverse
+    Add a scoring mechanism
+    Introduce save/load functionality
+    Look into a shift into real-time gameplay instead of turn-based
+    If possible, look into Bevy game engine for possible improvements
+    Flesh out story of the game with intro screen and outro screen

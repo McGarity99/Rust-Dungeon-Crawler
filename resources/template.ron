@@ -14,7 +14,7 @@ Templates(
         ),
         Template(
             entity_type: Enemy,
-            name: "Goblin", glyph: 'g', levels: [0, 1, 2],
+            name: "Goblin", glyph: 'v', levels: [0, 1, 2],
             hp: Some(1),
             frequency: 3,
             base_damage: Some(1)

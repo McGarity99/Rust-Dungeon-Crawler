@@ -1,0 +1,15 @@
+c:\Users\mcgar\Documents\GitHub\Rust_Dungeon\Rust-Dungeon-Crawler\target\debug\deps\ron-3abe6b90f8c2c29b.rmeta: C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\lib.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\de\mod.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\de\id.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\de\tag.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\de\value.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\ser\mod.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\ser\value.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\error.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\value.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\extensions.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\parse.rs
+
+c:\Users\mcgar\Documents\GitHub\Rust_Dungeon\Rust-Dungeon-Crawler\target\debug\deps\ron-3abe6b90f8c2c29b.d: C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\lib.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\de\mod.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\de\id.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\de\tag.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\de\value.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\ser\mod.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\ser\value.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\error.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\value.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\extensions.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\parse.rs
+
+C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\lib.rs:
+C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\de\mod.rs:
+C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\de\id.rs:
+C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\de\tag.rs:
+C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\de\value.rs:
+C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\ser\mod.rs:
+C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\ser\value.rs:
+C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\error.rs:
+C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\value.rs:
+C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\extensions.rs:
+C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\ron-0.7.0\src\parse.rs:

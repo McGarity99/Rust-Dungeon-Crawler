@@ -2,6 +2,7 @@ use crate::prelude::*;
 
 #[system]
 #[read_component(Health)]
+#[read_component(Armor)]
 #[read_component(Player)]
 #[read_component(Item)]
 #[read_component(Carried)]
@@ -9,6 +10,11 @@ use crate::prelude::*;
 pub fn hud(ecs: &SubWorld) {
     let mut health_query = <&Health>::query().filter(component::<Player>());
     let player_health = health_query
+        .iter(ecs)
+        .nth(0)
+        .unwrap();
+    let mut armor_query = <&Armor>::query().filter(component::<Player>());
+    let player_armor = armor_query
         .iter(ecs)
         .nth(0)
         .unwrap();
@@ -56,6 +62,21 @@ pub fn hud(ecs: &SubWorld) {
             player_health.max
             ),
             ColorPair::new(WHITE, RED)
+        );
+        draw_batch.bar_horizontal(
+            Point::new(0, 1),
+            SCREEN_WIDTH * 2,
+            player_armor.current,
+            player_armor.max,
+            ColorPair::new(GREEN, BLACK)
+        );
+        draw_batch.print_color_centered(
+            1,
+            format!("Armor: {} / {}",
+            player_armor.current,
+            player_armor.max
+            ),
+            ColorPair::new(WHITE, GREEN)
         );
 
         let (player, map_level) = <(Entity, &Player)>::query()

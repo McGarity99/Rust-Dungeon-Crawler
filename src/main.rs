@@ -15,6 +15,8 @@ mod prelude {
     pub const SCREEN_HEIGHT: i32 = 50;
     pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH / 2;
     pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT / 2;
+    pub const REG_FOV: i32 = 8;
+    pub const NV_FOV: i32 = 12;
     pub use crate::map::*;
     pub use crate::map_builder::*;
     pub use crate::camera::*;

@@ -67,7 +67,9 @@ impl Templates {
         template: &Template,
         commands: &mut legion::systems::CommandBuffer
     ) {
-        let entity = commands.push((    //puch tuple of components to define the new entity
+       /*  println!("spawning: {}", template.name.clone());
+        println!("at : {:?}", pt.clone()); */
+        let entity = commands.push((    //push tuple of components to define the new entity
             pt.clone(), //clone the position from pt to use it as a new component
             Render {
                 color: ColorPair::new(WHITE, BLACK),
@@ -94,6 +96,7 @@ impl Templates {
                 match provides.as_str() {
                     "Healing" => commands.add_component(entity, ProvidesHealing{amount: *n}),
                     "MagicMap" => commands.add_component(entity, ProvidesDungeonMap{}),
+                    "NVision" => commands.add_component(entity, ProvidesNVision{}),
                     _ => println!("Warning: we don't know hot to provide {}", provides),
                 }
             })

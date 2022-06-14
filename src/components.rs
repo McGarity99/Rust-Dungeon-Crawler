@@ -8,7 +8,7 @@ pub struct Render {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-pub struct Player{
+pub struct Player {
     pub map_level: u32
 }  //serves as "tag" indicating that an entity with this component is the player
 
@@ -32,6 +32,12 @@ pub struct WantsToAttack {
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Health {
+    pub current: i32,
+    pub max: i32
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Armor {
     pub current: i32,
     pub max: i32
 }
@@ -64,12 +70,25 @@ impl FieldOfView {
         }
     }
 
+    pub fn new_nv() -> Self {
+        Self { visible_tiles: HashSet::new(),
+             radius: NV_FOV,
+              is_dirty: true
+        }
+    }
+
     pub fn clone_dirty(&self) -> Self {
         Self {
             visible_tiles: HashSet::new(),
             radius: self.radius,
             is_dirty: true
         }
+    }
+
+    pub fn set_fov(&mut self) {
+        self.visible_tiles = HashSet::new();
+        self.radius = NV_FOV;
+        self.is_dirty = true;
     }
 }
 
@@ -80,6 +99,14 @@ pub struct ProvidesHealing {
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct ProvidesDungeonMap;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ProvidesNVision;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ProvidesArmor {
+    pub amount: i32
+}
 
 #[derive(Clone, PartialEq)]
 pub struct Carried(pub Entity);

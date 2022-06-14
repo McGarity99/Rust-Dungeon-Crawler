@@ -13,8 +13,14 @@ Templates(
             frequency: 1
         ),
         Template(
+            entity_type: Item,
+            name: "NV Goggles", glyph: 'Ω', levels : [0, 1, 2],
+            provides: Some([("NVision", 0)]),
+            frequency: 1
+        ),
+        Template(
             entity_type: Enemy,
-            name: "Goblin", glyph: 'v', levels: [0, 1, 2],
+            name: "Goblin", glyph: 'g', levels: [0, 1, 2],
             hp: Some(1),
             frequency: 3,
             base_damage: Some(1)

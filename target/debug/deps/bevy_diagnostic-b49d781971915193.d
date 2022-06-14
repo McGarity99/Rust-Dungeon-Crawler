@@ -1,9 +1,0 @@
-c:\Users\mcgar\Documents\GitHub\Rust_Dungeon\Rust-Dungeon-Crawler\target\debug\deps\bevy_diagnostic-b49d781971915193.rmeta: C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\lib.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\diagnostic.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\entity_count_diagnostics_plugin.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\frame_time_diagnostics_plugin.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\log_diagnostics_plugin.rs
-
-c:\Users\mcgar\Documents\GitHub\Rust_Dungeon\Rust-Dungeon-Crawler\target\debug\deps\bevy_diagnostic-b49d781971915193.d: C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\lib.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\diagnostic.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\entity_count_diagnostics_plugin.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\frame_time_diagnostics_plugin.rs C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\log_diagnostics_plugin.rs
-
-C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\lib.rs:
-C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\diagnostic.rs:
-C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\entity_count_diagnostics_plugin.rs:
-C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\frame_time_diagnostics_plugin.rs:
-C:\Users\mcgar\.cargo\registry\src\github.com-1ecc6299db9ec823\bevy_diagnostic-0.7.0\src\log_diagnostics_plugin.rs:

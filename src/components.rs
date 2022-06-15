@@ -108,7 +108,7 @@ pub struct ProvidesArmor {
     pub amount: i32
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct Carried(pub Entity);
 
 #[derive(Clone, Copy, Debug, PartialEq)]

@@ -25,37 +25,62 @@ pub fn player_input(
             VirtualKeyCode::Up => Point::new(0, -1),
             VirtualKeyCode::Down => Point::new(0, 1),
             VirtualKeyCode::G => {
-                let (player, player_pos) = players.iter(ecs).find_map(|(entity, pos)| Some((*entity, *pos))).unwrap();
-                let mut items = <(Entity, &Item, &Point)>::query();
-                items.iter(ecs)
-                    .filter(|(_entity, _item, &item_pos)| item_pos == player_pos)
-                    .for_each(|(entity, _item, _item_pos)| {
-                        commands.remove_component::<Point>(*entity);
-                        commands.add_component(*entity, Carried(player));
 
-                        if let Ok(e) = ecs.entry_ref(*entity) {
-                            if e.get_component::<Weapon>().is_ok() {
-                                <(Entity, &Carried, &Weapon)>::query()
-                                .iter(ecs)
-                                .filter(|(_, c, _)| c.0 == player)
-                                .for_each(|(e, c, w)| {
-                                    commands.remove(*e);
-                                })
+                let mut temp_count = 0;
+                        let mut temp_carried_query = <&Carried>::query();
+                        temp_carried_query.iter(ecs).for_each(|_c| {
+                            temp_count += 1;
+                        });
+
+                println!("carried items: {}", temp_count);
+
+                if temp_count < 3 {
+                    println!("less than 3, carrying item");
+                    let (player, player_pos) = players.iter(ecs).find_map(|(entity, pos)| Some((*entity, *pos))).unwrap();
+
+                    let mut items = <(Entity, &Item, &Point)>::query();
+
+                    items.iter(ecs)
+                        .filter(|(_entity, _item, &item_pos)| item_pos == player_pos)
+                        .for_each(|(entity, _item, _item_pos)| {
+                            println!("adding Carried(player)");
+                            commands.remove_component::<Point>(*entity);
+                            commands.add_component(*entity, Carried(player));
+                            
+                            if let Ok(e) = ecs.entry_ref(*entity) {
+                                if e.get_component::<Weapon>().is_ok() {
+                                    <(Entity, &Carried, &Weapon)>::query()
+                                    .iter(ecs)
+                                    .filter(|(_, c, _)| c.0 == player)
+                                    .for_each(|(e, _c, _w)| {
+                                        commands.remove(*e);
+                                    })
+                                }
                             }
                         }
-                    }
-                );
+                    );
+                    //Point::new(0, 0)
+                }
                 Point::new(0, 0)
             },
-            VirtualKeyCode::Key1 => use_item(0, ecs, commands),
+            /* VirtualKeyCode::Key1 => use_item(0, ecs, commands),
             VirtualKeyCode::Key2 => use_item(1, ecs, commands),
             VirtualKeyCode::Key3 => use_item(2, ecs, commands),
             VirtualKeyCode::Key4 => use_item(3, ecs, commands),
             VirtualKeyCode::Key5 => use_item(4, ecs, commands),
-            VirtualKeyCode::Key6 => use_item(5, ecs, commands),
-            VirtualKeyCode::Key7 => use_item(6, ecs, commands),
-            VirtualKeyCode::Key8 => use_item(7, ecs, commands),
-            VirtualKeyCode::Key9 => use_item(8, ecs, commands),
+            VirtualKeyCode::Key6 => use_item(5, ecs, commands), */
+            VirtualKeyCode::Key7 => {
+                //println!("using_item 6, ecs, commands");
+                use_item(0, ecs, commands)
+            },
+            VirtualKeyCode::Key8 => {
+                //println!("using_item 7, ecs, commands");
+                use_item(1, ecs, commands)
+            },
+            VirtualKeyCode::Key9 => {
+                //println!("using_item 8, ecs, commands");
+                use_item(2, ecs, commands)
+            },
             _ => Point::new(0, 0),
         };
 
@@ -123,6 +148,7 @@ fn use_item(n: usize, ecs: &mut SubWorld, commands: &mut CommandBuffer) -> Point
         .find_map(|(_, (item_entity, _, _))| Some(*item_entity));   //iterate through carried items and filter out those not carried by the player
 
     if let Some(item_entity) = item_entity {    //need if-let here because find_map could return None
+        //println!("commands pushing... ");
         commands
         .push(((), ActivateItem {
             used_by: player_entity,

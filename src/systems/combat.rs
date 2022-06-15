@@ -56,6 +56,7 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                 }
             } else {
                 take_health = true;         //move to take away health if armor is 0
+                health_damage = final_damage;
             }
         } else {
             println!("No armor component for victim: {:?}", victim);

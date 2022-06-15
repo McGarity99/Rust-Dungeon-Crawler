@@ -4,10 +4,13 @@ use crate::prelude::*;
 #[read_component(WantsToAttack)]
 #[read_component(Player)]
 #[write_component(Health)]
+#[write_component(Armor)]
 #[read_component(Damage)]
 #[read_component(Carried)]
 pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
     let mut attackers = <(Entity, &WantsToAttack)>::query();
+    let mut take_health = false;
+    let mut health_damage = 0;
 
     let victims: Vec<(Entity, Entity, Entity)> = attackers
         .iter(ecs)
@@ -35,12 +38,38 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
             .map(|(_, dmg)| dmg.0)
             .sum();
         let final_damage = base_damage + weapon_damage;
+        if let Ok(mut armor) = ecs
+            .entry_mut(*victim)
+            .unwrap()
+            .get_component_mut::<Armor>()
+        {
+            if armor.current > 0 {
+                println!("damage received: {}", final_damage);
+                let new_damage = final_damage - armor.current;      //calculate damage taken by armor
+                if new_damage < 0 {                                      //if armor absorbs all damage with armor points left over
+                    armor.current = new_damage * -1;
+                } else if new_damage == 0 {                              //if armor absorbs all damage with no armor points left over
+                    armor.current = 0;
+                } else {                                                 //if damage is enough to "break" armor and damage player's health
+                    take_health = true;
+                    health_damage = new_damage;
+                }
+            } else {
+                take_health = true;         //move to take away health if armor is 0
+            }
+        } else {
+            println!("No armor component for victim: {:?}", victim);
+        }
         if let Ok(mut health) = ecs
             .entry_mut(*victim)
             .unwrap()
             .get_component_mut::<Health>()
         {
-            health.current -= final_damage;
+            if is_player && take_health {               //if player is attacked (and no armor or broken armor)
+                health.current -= health_damage;
+            } else if !is_player {                      //if monster is attacked (apply player's final_damage)
+                health.current -= final_damage;
+            }
             if health.current < 1 && !is_player {
                 commands.remove(*victim);
             }

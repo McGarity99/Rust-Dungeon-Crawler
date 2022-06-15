@@ -18,8 +18,8 @@ pub fn spawn_player(ecs: &mut World, pos: Point) { //calling this function adds 
                 max: 30
             },
             Armor {
-                current: 5,
-                max: 5
+                current: 20,
+                max: 20
             },
             FieldOfView::new(REG_FOV),
             Damage(1)

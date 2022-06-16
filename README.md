@@ -7,22 +7,22 @@ The game was developed through the book "Hands-on Rust", by Herbert Wolverson (I
 <br />
 <br />
 ## Ideas for Expansion
-[] Change tileset from fantasy to sci-fi/horror theme <br />
-[] Increase enemy variety and complexity <br />
-[] Introduce new map elements (locked doors, keys, etc.) <br />
-[] Itroduce new items for gameplay: <br />
-&emsp[] NV Goggles: increase player FOV and apply green tint to environment <br />
-&emsp[] Attack armor: shield player from incoming damage until armor is depleted <br />
-[] Introduce environmental hazards <br />
-&emsp[] Poison gas - could require gas mask item to traverse <br />
-[] Add a scoring mechanism <br />
-[] Add gameplay music and/or sound fx
+[ ] Change tileset from fantasy to sci-fi/horror theme <br />
+[ ] Increase enemy variety and complexity <br />
+[ ] Introduce new map elements (locked doors, keys, etc.) <br />
+[ ] Itroduce new items for gameplay: <br />
+&emsp[ ] NV Goggles: increase player FOV and apply green tint to environment <br />
+&emsp[ ] Attack armor: shield player from incoming damage until armor is depleted <br />
+[ ] Introduce environmental hazards <br />
+&emsp[ ] Poison gas - could require gas mask item to traverse <br />
+[ ] Add a scoring mechanism <br />
+[ ] Add gameplay music and/or sound fx
 <br />
-*# Stretch Goals 
+## Stretch Goals 
 If time permits, I would like to look into these more advanced concepts: <br />
-[] Shift into real-time gameplay instead of turn-based <br />
-[] Look into Bevy game engine for possible improvements to performance <br />
-[] Add more detail to the game's story with an intro/outro screen <br />
+[ ] Shift into real-time gameplay instead of turn-based <br />
+[ ] Look into Bevy game engine for possible improvements to performance <br />
+[ ] Add more detail to the game's story with an intro/outro screen <br />
 <br />
 ## Crates used:
 bracket-lib = ~0.8.1

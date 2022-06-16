@@ -14,7 +14,7 @@ The game was developed through the book "Hands-on Rust", by Herbert Wolverson (I
 &emsp;[ ] NV Goggles: increase player FOV and apply green tint to environment <br />
 &emsp;[ ] Attack armor: shield player from incoming damage until armor is depleted <br />
 [ ] Introduce environmental hazards <br />
-&emsp[ ] Poison gas - could require gas mask item to traverse <br />
+&emsp;[ ] Poison gas - could require gas mask item to traverse <br />
 [ ] Add a scoring mechanism <br />
 [ ] Add gameplay music and/or sound fx
 <br />

@@ -19,6 +19,12 @@ Templates(
             frequency: 1
         ),
         Template(
+            entity_type: Item,
+            name: "Armor Pickup", glyph: 'Θ', levels : [0, 1, 2],
+            provides: Some([("Armor", 5)]),
+            frequency: 1
+        ),
+        Template(
             entity_type: Enemy,
             name: "Goblin", glyph: 'g', levels: [0, 1, 2],
             hp: Some(1),

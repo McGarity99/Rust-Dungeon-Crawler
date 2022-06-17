@@ -5,6 +5,8 @@ use crate::prelude::*;
 #[read_component(ProvidesHealing)]
 #[write_component(Health)]
 #[read_component(ProvidesDungeonMap)]
+#[write_component(Armor)]
+#[read_component(ProvidesArmor)]
 #[write_component(FieldOfView)]
 #[read_component(ProvidesNVision)]
 #[read_component(Player)]
@@ -32,6 +34,7 @@ pub fn use_item(
     player_fov.set_fov(); */
 
     let mut healing_to_apply = Vec::<(Entity, i32)>::new();
+    let mut armor_to_apply = Vec::<(Entity, i32)>::new();
     <(Entity, &ActivateItem)>::query().iter(ecs)
     .for_each(|(entity, activate)| {
         println!("activate: {:?}", activate);
@@ -42,8 +45,10 @@ pub fn use_item(
             }
             if let Ok(_mapper) = item.get_component::<ProvidesDungeonMap>() {
                 map.revealed_tiles.iter_mut().for_each(|t| *t = true);  //if ProvidesDungeonMap component is present, reveal all map tiles
-            } else {
-                println!("not NV");
+            }
+            if let Ok(armor) = item.get_component::<ProvidesArmor>() {
+                println!("armor to apply pushing: {}", armor.amount);
+                armor_to_apply.push((activate.used_by, armor.amount));
             }
         }
         commands.remove(activate.item);
@@ -55,5 +60,13 @@ pub fn use_item(
                 health.current = i32::min(health.max, health.current + heal.1);
             }
         }
-    }
+    }   //apply healing to the target, taking min between max and current + amount, to avoid going over the maximum
+
+    for armor in armor_to_apply.iter() {
+        if let Ok(mut target) = ecs.entry_mut(armor.0) {
+            if let Ok(armor_amt) = target.get_component_mut::<Armor>() {
+                armor_amt.current = i32::min(armor_amt.max, armor_amt.current + armor.1);
+            }
+        }
+    }   //apply armor to the target, taking min between max and current + amount, to avoid going over the maximum
 }

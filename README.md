@@ -19,6 +19,7 @@ The game was developed through the book "Hands-on Rust", by Herbert Wolverson (I
 * [ ] Add a scoring mechanism <br />
 * [ ] Add gameplay music and/or sound fx
 <br />
+
 ## Stretch Goals 
 If time permits, I would like to look into these more advanced concepts: <br />
 * [ ] Shift into real-time gameplay instead of turn-based <br />

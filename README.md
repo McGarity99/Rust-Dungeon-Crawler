@@ -26,6 +26,7 @@ If time permits, I would like to look into these more advanced concepts: <br />
 * [ ] Look into Bevy game engine for possible improvements to performance <br />
 * [ ] Add more detail to the game's story with an intro/outro screen <br />
 <br />
+
 ## Crates used:
 bracket-lib = ~0.8.1
 <br />

@@ -4,6 +4,7 @@ use crate::prelude::*;
 #[read_component(Point)]
 #[read_component(Name)]
 #[read_component(Health)]
+#[read_component(Damage)]
 #[read_component(FieldOfView)]
 #[read_component(Player)]
 pub fn tooltips(ecs: &SubWorld, 
@@ -28,11 +29,24 @@ pub fn tooltips(ecs: &SubWorld,
         .filter(|(_, pos, _)| **pos == map_pos) //only include elements whose Point position is equal to the current mouse cursor position stored in map_pos
         .for_each(|(entity, _, name)| {
             let screen_pos = *mouse_pos * 4;    //mouse position is in coordinates aligning with the monster layer; tooltips layer is 4 times larger
+            /* if ecs.entry_ref(*entity).unwrap().get_component::<Damage>().is_ok() {
+                println!("damage found");
+            } else {
+                println!("no damage found");
+            } TODO: remove this debugging section before submission */
+            let dmg = if let Ok(damage) = ecs.entry_ref(*entity)
+                .unwrap()
+                .get_component::<Damage>()
+            {
+                format!("{} dmg", damage.0)
+            } else {
+                format!("")
+            };
             let display = if let Ok(health) = ecs.entry_ref(*entity)    //use entry_ref to access an entity's components from outside a query
                 .unwrap()
                 .get_component::<Health>()
             {
-                format!("{} : {} hp", &name.0, health.current)
+                format!("{} : {} hp {}", &name.0, health.current, dmg)
             } else {    //if hovering over a non-enemy entity (ex: treasure), just display its name
                 name.0.clone()
             };

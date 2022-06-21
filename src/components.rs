@@ -42,6 +42,12 @@ pub struct Armor {
     pub max: i32
 }
 
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Score {
+    pub current: i32,
+    pub max: i32
+}
+
 #[derive(Clone, PartialEq)]
 pub struct Name(pub String);
 
@@ -105,6 +111,11 @@ pub struct ProvidesNVision;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct ProvidesArmor {
+    pub amount: i32
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ProvidesScore {
     pub amount: i32
 }
 

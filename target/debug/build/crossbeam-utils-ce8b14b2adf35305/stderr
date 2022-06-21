@@ -4,7 +4,7 @@ error[E0412]: cannot find type `AtomicU128` in module `core::sync::atomic`
 1    |   pub type Probe = core::sync::atomic::AtomicU128;
      |                                        ^^^^^^^^^^ help: a struct with a similar name exists: `AtomicU16`
      |
-    ::: C:\Users\mcgar\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\core\src\sync\atomic.rs:2145:1
+    ::: C:\Users\hunte\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\core\src\sync\atomic.rs:2145:1
      |
 2145 | / atomic_int! {
 2146 | |     cfg(target_has_atomic = "16"),

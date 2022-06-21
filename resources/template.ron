@@ -3,8 +3,8 @@ Templates(
         Template(
             entity_type: Item,
             name: "Healing Potion", glyph: '!', levels : [0, 1, 2],
-            provides: Some([("Healing", 6)]),
-            frequency: 2
+            provides: Some([("Healing", 5)]),
+            frequency: 1
         ),
         Template(
             entity_type: Item,
@@ -20,8 +20,20 @@ Templates(
         ),
         Template(
             entity_type: Item,
-            name: "Armor Pickup", glyph: 'Θ', levels : [0, 1, 2],
+            name: "Small Armor Pickup", glyph: 'Θ', levels : [1, 2],
+            provides: Some([("Armor", 2)]),
+            frequency: 1
+        ),
+        Template(
+            entity_type: Item,
+            name: "Large Armor Pickup", glyph: 'Φ', levels : [0, 1],
             provides: Some([("Armor", 5)]),
+            frequency: 2
+        ),
+        Template(
+            entity_type: Item,
+            name: "Gold", glyph: '$', levels : [0, 1, 2],
+            provides: Some([("Score", 100)]),
             frequency: 1
         ),
         Template(
@@ -40,32 +52,33 @@ Templates(
         ),
         Template(
             entity_type: Enemy,
-            name: "Ogre", glyph: 'O', levels: [0, 1, 2],
+            name: "Ogre", glyph: 'O', levels: [1, 2],
             hp: Some(3),
             frequency: 2,
             base_damage: Some(2)
         ),
         Template(
-            entity_type: Item,
-            name: "Weak Healing Potion", glyph: '!', levels : [0, 1, 2],
-            provides: Some([("Healing", 2)]),
-            frequency: 2
+            entity_type: Enemy,
+            name: "Ducephalon", glyph: 'E', levels: [2],
+            hp: Some(4),
+            frequency: 1,
+            base_damage: Some(4)
         ),
         Template(
             entity_type: Item,
-            name: "Rusty Sword", glyph: '/', levels: [0, 1, 2],
+            name: "Rusty Sword", glyph: 's', levels: [0, 1],
             frequency: 1,
             base_damage: Some(1)
         ),
         Template(
             entity_type: Item,
-            name: "Superior Sword", glyph: 's', levels: [0, 1, 2],
+            name: "Superior Sword", glyph: 'S', levels: [0, 1, 2],
             frequency: 1,
             base_damage: Some(2)
         ),
         Template(
             entity_type: Item,
-            name: "Impractical Sword", glyph: 'S', levels: [1, 2],
+            name: "Champion Sword", glyph: '/', levels: [1, 2],
             frequency: 1,
             base_damage: Some(3)
         )

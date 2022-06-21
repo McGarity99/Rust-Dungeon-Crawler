@@ -3,6 +3,7 @@ use crate::prelude::*;
 #[system]
 #[read_component(Health)]
 #[read_component(Armor)]
+#[read_component(Score)]
 #[read_component(Player)]
 #[read_component(Item)]
 #[read_component(Carried)]
@@ -15,6 +16,11 @@ pub fn hud(ecs: &SubWorld) {
         .unwrap();
     let mut armor_query = <&Armor>::query().filter(component::<Player>());
     let player_armor = armor_query
+        .iter(ecs)
+        .nth(0)
+        .unwrap();
+    let mut score_query = <&Score>::query().filter(component::<Player>());
+    let player_score = score_query
         .iter(ecs)
         .nth(0)
         .unwrap();
@@ -86,6 +92,12 @@ pub fn hud(ecs: &SubWorld) {
         draw_batch.print_color_right(
             Point::new(SCREEN_WIDTH*2, 1),
             format!("Dungeon Level: {}", map_level+1),
+            ColorPair::new(BLUE, BLACK)
+        );
+
+        draw_batch.print_color_right(
+            Point::new(SCREEN_WIDTH * 2, 3),
+            format!("Score: {}", player_score.current),
             ColorPair::new(YELLOW, BLACK)
         );
 

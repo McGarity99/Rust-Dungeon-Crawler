@@ -98,7 +98,8 @@ impl Templates {
                     "MagicMap" => commands.add_component(entity, ProvidesDungeonMap{}),
                     "NVision" => commands.add_component(entity, ProvidesNVision{}),
                     "Armor" => commands.add_component(entity, ProvidesArmor{amount: *n}),
-                    _ => println!("Warning: we don't know hot to provide {}", provides),
+                    "Score" => commands.add_component(entity, ProvidesScore{amount: *n}),
+                    _ => println!("Warning: we don't know how to provide {}", provides),
                 }
             })
         }

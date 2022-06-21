@@ -14,12 +14,16 @@ pub fn spawn_player(ecs: &mut World, pos: Point) { //calling this function adds 
                 glyph: to_cp437('@')
             },
             Health {
-                current: 30,
-                max: 30
+                current: 15,
+                max: 15
             },
             Armor {
-                current: 20,
-                max: 20
+                current: 10,
+                max: 10
+            },
+            Score {
+                current: 0,
+                max: std::i32::MAX
             },
             FieldOfView::new(REG_FOV),
             Damage(1)

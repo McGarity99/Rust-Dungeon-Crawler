@@ -31,7 +31,7 @@ Templates(
             frequency: 2
         ),
         Template(
-            entity_type: Item,
+            entity_type: Score,
             name: "Gold", glyph: '$', levels : [0, 1, 2],
             provides: Some([("Score", 100)]),
             frequency: 1

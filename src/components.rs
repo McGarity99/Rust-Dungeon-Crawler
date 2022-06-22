@@ -58,6 +58,9 @@ pub struct ChasingPlayer;
 pub struct Item;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ScoreItem;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct AmuletOfYala;
 
 #[derive(Clone, Debug, PartialEq)]

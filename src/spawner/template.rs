@@ -19,7 +19,7 @@ pub struct Template {
 
 #[derive(Clone, Deserialize, Debug, PartialEq)]
 pub enum EntityType {
-    Enemy, Item
+    Enemy, Item, Score
 }
 
 #[derive(Clone, Deserialize, Debug)]
@@ -80,6 +80,7 @@ impl Templates {
 
         match template.entity_type {
             EntityType::Item => commands.add_component(entity, Item{}),
+            EntityType::Score => commands.add_component(entity, ScoreItem{}),
             EntityType::Enemy => {
                 commands.add_component(entity, Enemy{});
                 commands.add_component(entity, FieldOfView::new(6));

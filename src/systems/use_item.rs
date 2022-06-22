@@ -37,7 +37,7 @@ pub fn use_item(
     let mut armor_to_apply = Vec::<(Entity, i32)>::new();
     <(Entity, &ActivateItem)>::query().iter(ecs)
     .for_each(|(entity, activate)| {
-        println!("activate: {:?}", activate);
+        //println!("activate: {:?}", activate);
         let item = ecs.entry_ref(activate.item);
         if let Ok(item) = item {
             if let Ok(healing) = item.get_component::<ProvidesHealing>() {

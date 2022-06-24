@@ -84,23 +84,22 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                     .unwrap()
                     .get_component::<ProvidesScore>()
                 {
-                    let score_yield = ecs
+                    let score_yield = if let Ok(score) = ecs
                         .entry_ref(*victim)
                         .unwrap()
-                        .get_component::<ProvidesScore>();
-                    if let Ok(s_y) = score_yield {
-                        let mut score_query = <&Score>::query().filter(component::<Player>());
-                        let mut player_score = score_query.iter(ecs).nth(0).unwrap();
-                        player_score.current = i32::min(player_score.max, player_score.current + s_y.amount);
-                    }
-                    /* match score_yield {
-                        Ok(s_y) => {
-                            player_score.current += i32::min(player_score.max, player_score.current + s_y.amount);
-                        },
-                        _ => {}
-                    } */
+                        .get_component::<ProvidesScore>() {
+                            println!("score yield: {:?}", score.amount);    //debugging purposes, remove later
+                            let mut player_query = <Entity>::query().filter(component::<Player>()); //query to get Entities with Player tag
+                            let player_entity = player_query.iter(ecs).nth(0).unwrap(); //get player entity
+                            if let Ok(mut p_score) = ecs.clone().entry_mut(*player_entity) //get mutable access to Player's score by cloning the SubWorld
+                                .unwrap()
+                                .get_component_mut::<Score>()
+                            {
+                                p_score.current = i32::min(p_score.max, p_score.current + score.amount);    //add to Player's score without going over the limit
+                            }
+                        };
                 }
-                commands.remove(*victim);
+                commands.remove(*victim);   //enemy is slain, so remove it from the game
             }
         }
 

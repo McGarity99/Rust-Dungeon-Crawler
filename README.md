@@ -16,7 +16,7 @@ The game was developed through the book "Hands-on Rust", by Herbert Wolverson (I
 * [ ] Introduce environmental hazards: <br />
 * [ ] Poison gas - could require gas mask item to traverse <br />
 ### Other Mechanics: <br />
-* [ ] Add a scoring mechanism <br />
+* [x] Add a scoring mechanism <br />
 * [ ] Add gameplay music and/or sound fx
 <br />
 

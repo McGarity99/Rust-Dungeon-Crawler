@@ -59,15 +59,8 @@ pub fn player_input(
                         score.current += score_amt;
                     }
                 } else {
-                    /* gold_locs.iter(ecs)
-                        .filter(|(_entity, _item, &item_pos)| item_pos == player_pos)
-                        .for_each(|(entity, item, _item_pos)| {
-                            println!("got gold");
-                            picked_up_gold = true;
-                        }
-                    ); */
 
-                    let mut temp_count = 0;
+                    let mut temp_count = 0; //represents the # of items currently carried by the Player
                     let mut temp_carried_query = <&Carried>::query();
                     temp_carried_query.iter(ecs).for_each(|_c| {
                         temp_count += 1;
@@ -75,7 +68,7 @@ pub fn player_input(
 
                     println!("carried items: {}", temp_count);
 
-                    if temp_count < 3 {
+                    if temp_count < 3 { //limits Player's inventory to 3 items maximum
                         println!("less than 3, carrying item");
                         let (player, player_pos) = players
                             .iter(ecs)

@@ -8,7 +8,7 @@ The game was developed through the book "Hands-on Rust", by Herbert Wolverson (I
 <br />
 ## Ideas for Expansion
 * [ ] Change tileset from fantasy to sci-fi/horror theme <br />
-* [ ] Increase enemy variety and complexity <br />
+* [x] Increase enemy variety and complexity <br />
 * [ ] Introduce new map elements (locked doors, keys, etc.) <br />
 ### Introduce new items for gameplay: <br />
 * [ ] NV Goggles: increase player FOV and apply green tint to environment <br />

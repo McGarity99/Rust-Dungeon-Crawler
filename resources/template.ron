@@ -20,19 +20,19 @@ Templates(
         ),
         Template(
             entity_type: Item,
-            name: "Small Armor Pickup", glyph: 'Θ', levels : [1, 2],
+            name: "Light Armor Pickup", glyph: 'a', levels : [1, 2],
             provides: Some([("Armor", 2)]),
             frequency: 1
         ),
         Template(
             entity_type: Item,
-            name: "Large Armor Pickup", glyph: 'Φ', levels : [0, 1],
+            name: "Heavy Armor Pickup", glyph: 'Φ', levels : [0, 1],
             provides: Some([("Armor", 5)]),
             frequency: 2
         ),
         Template(
             entity_type: Score,
-            name: "Gold", glyph: '$', levels : [0, 1, 2],
+            name: "Treasure", glyph: '&', levels : [0, 1, 2],
             provides: Some([("Score", 100)]),
             frequency: 1
         ),

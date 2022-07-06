@@ -47,17 +47,22 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
         if let Ok(mut armor) = ecs.entry_mut(*victim).unwrap().get_component_mut::<Armor>() {
             if armor.current > 0 {
                 println!("damage received: {}", final_damage);
-                let new_damage = final_damage - armor.current; //calculate damage taken by armor
+                let mut new_damage = final_damage - armor.current; //calculate damage taken by armor
+                println!("new damage: {}", new_damage);
                 if new_damage < 0 {
                     //if armor absorbs all damage with armor points left over
                     armor.current = new_damage * -1;
+                    println!("armor absorbed all dmg");
                 } else if new_damage == 0 {
                     //if armor absorbs all damage with no armor points left over
                     armor.current = 0;
+                    println!("armor absorbed all, no armor left");
                 } else {
                     //if damage is enough to "break" armor and damage player's health
                     take_health = true;
+                    armor.current = 0;
                     health_damage = new_damage;
+                    println!("armor broken");
                 }
             } else {
                 take_health = true; //move to take away health if armor is 0

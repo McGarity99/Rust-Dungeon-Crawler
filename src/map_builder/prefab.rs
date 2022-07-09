@@ -14,6 +14,19 @@ const FORTRESS: (&str, i32, i32) = ("
 ------------
 ", 12, 11);
 
+const LABYRINTH: (&str, i32, i32) = ("
+-------------
+-###########-
+-#-#-----#M#-
+-#---#-#---#-
+---#-#M#---#-
+-#-#-#-#####-
+-#-#-#-#---#-
+-#####---#-#-
+-#M----#-#-#-
+-#########-#-
+", 13, 10);
+
 pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
     let mut placement = None;
 
@@ -28,10 +41,10 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
     let mut attempts = 0;
     while placement.is_none() && attempts < 10 {    //while placement is empty, and attempts are less than 10, loop
         let dimensions = Rect::with_size(   //create a Rect type starting at a random map location, with the height and width of the vault
-            rng.range(0, SCREEN_WIDTH - FORTRESS.1),
-            rng.range(0, SCREEN_HEIGHT - FORTRESS.2),
-            FORTRESS.1,
-            FORTRESS.2
+            rng.range(0, SCREEN_WIDTH - LABYRINTH.1),
+            rng.range(0, SCREEN_HEIGHT - LABYRINTH.2),
+            LABYRINTH.1,
+            LABYRINTH.2
         );
 
         let mut can_place = false;
@@ -51,12 +64,12 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
     }
 
     if let Some(placement) = placement {
-        let string_vec: Vec<char> = FORTRESS.0
+        let string_vec: Vec<char> = LABYRINTH.0
             .chars().filter(|a| *a != '\r' && *a != '\n')   //use an iterator to remove \r and \n charecters in the string literal
             .collect();
         let mut i = 0;  //represents the current location in the prefab as we iterate through it
-        for ty in placement.y .. placement.y + FORTRESS.2 { //iterate every tile the prefab will cover
-            for tx in placement.x .. placement.x + FORTRESS.1 {
+        for ty in placement.y .. placement.y + LABYRINTH.2 { //iterate every tile the prefab will cover
+            for tx in placement.x .. placement.x + LABYRINTH.1 {
                 let idx = map_idx(tx, ty);
                 let c = string_vec[i];  //retrieve the character at position i from the string
                 match c {
@@ -66,6 +79,7 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
                     },
                     '-' => mb.map.tiles[idx] = TileType::Floor,
                     '#' => mb.map.tiles[idx] = TileType::Wall,
+                    'y' => mb.map.tiles[idx] = TileType::PoisonFloor,
                     _ => println!("No idea what to do with {}", c)
                 }
                 i += 1;

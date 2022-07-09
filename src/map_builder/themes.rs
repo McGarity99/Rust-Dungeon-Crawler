@@ -13,6 +13,7 @@ impl MapTheme for DungeonTheme {
         match tile_type {
             TileType::Floor => to_cp437('.'),
             TileType::Wall => to_cp437('#'),
+            TileType::PoisonFloor => to_cp437('y'),
             TileType::Exit => to_cp437('>')
         }
     }
@@ -25,12 +26,51 @@ impl MapTheme for ForestTheme {
         match tile_type {
             TileType::Floor => to_cp437(';'),
             TileType::Wall => to_cp437('"'),
+            TileType::PoisonFloor => to_cp437('y'),
             TileType::Exit => to_cp437('>')
         }
     }
 }
 
 impl ForestTheme {
+    pub fn new() -> Box<dyn MapTheme> {
+        Box::new(Self{})
+    }
+}
+
+pub struct VolcanoTheme{}
+
+impl MapTheme for VolcanoTheme {
+    fn tile_to_render(&self, tile_type: TileType) -> FontCharType {
+        match tile_type {
+            TileType::Floor => to_cp437('G'),
+            TileType::Wall => to_cp437('I'),
+            TileType::PoisonFloor => to_cp437('y'),
+            TileType::Exit => to_cp437('>')
+        }
+    }
+}
+
+impl VolcanoTheme {
+    pub fn new() -> Box<dyn MapTheme> {
+        Box::new(Self{})
+    }
+}
+
+pub struct TempleTheme{}
+
+impl MapTheme for TempleTheme {
+    fn tile_to_render(&self, tile_type: TileType) -> FontCharType {
+        match tile_type {
+            TileType::Floor => to_cp437(')'),
+            TileType::Wall => to_cp437('('),
+            TileType::PoisonFloor => to_cp437('y'),
+            TileType::Exit => to_cp437('>')
+        }
+    }
+}
+
+impl TempleTheme {
     pub fn new() -> Box<dyn MapTheme> {
         Box::new(Self{})
     }

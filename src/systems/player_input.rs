@@ -37,7 +37,7 @@ pub fn player_input(
                     .unwrap();
                 
                 let mut player_query = <Entity>::query().filter(component::<Player>()); //get the score (only the player has a Score component)
-                let mut player_entity = player_query.iter(ecs).nth(0).unwrap(); //get player so we can access their Score component
+                let player_entity = player_query.iter(ecs).nth(0).unwrap(); //get player so we can access their Score component
 
                 let mut gold_locs = <(Entity, &ScoreItem, &Point, &ProvidesScore)>::query();   //get all entities that have a ScoreItem & Point component
                 gold_locs

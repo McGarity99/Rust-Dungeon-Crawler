@@ -32,42 +32,6 @@ pub fn map_render(ecs: &SubWorld, #[resource] map: &Map, #[resource] camera: &Ca
                     ),
                     glyph
                 );
-
-                /* match map.tiles[idx] {
-                    TileType::Floor => {
-                        draw_batch.set(
-                            pt - offset,
-                            ColorPair::new(
-                                tint,
-                                BLACK
-                            ),
-                            to_cp437('.')
-                        );
-                    },
-                    TileType::Wall => {
-                        draw_batch.set(
-                            pt - offset,
-                            ColorPair::new(
-                                tint,
-                                BLACK
-                            ),
-                            to_cp437('#')
-                        );
-                    }
-                } */
-                
-                /* let glyph = match map.tiles[idx] {
-                    TileType::Floor => to_cp437('.'),
-                    TileType::Wall => to_cp437('#')
-                };
-                draw_batch.set(
-                    pt - offset,
-                    ColorPair::new(
-                        WHITE,
-                        BLACK
-                    ),
-                    glyph
-                ); */
             }
         }
     }

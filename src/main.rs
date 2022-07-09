@@ -15,6 +15,8 @@ mod prelude {
     pub const SCREEN_HEIGHT: i32 = 50;
     pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH / 2;
     pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT / 2;
+    pub const REG_FOV: i32 = 8;
+    pub const NV_FOV: i32 = 12;
     pub use crate::map::*;
     pub use crate::map_builder::*;
     pub use crate::camera::*;
@@ -229,10 +231,11 @@ fn main() -> BError {
         .with_dimensions(DISPLAY_WIDTH, DISPLAY_HEIGHT) //specify the size of subsequent consoles you add
         .with_tile_dimensions(32, 32)   //tile dimensions specifies the size of each character/object in the font file
         .with_resource_path("../resources/")
-        .with_font("dungeonfont.png", 32, 32)
+        .with_font("dungeonfont2_new_theme.png", 32, 32)
         .with_font("terminal8x8.png", 8, 8)
-        .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, "dungeonfont.png")  //add a console using the specified dimensions and the named tile graphics file
-        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "dungeonfont.png")    //add a second console with no background so transparency shows through it
+        .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, "dungeonfont2_new_theme.png")  //add a console using the specified dimensions and the named tile graphics file
+        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "dungeonfont2_new_theme.png")    //add a second console with no background so transparency shows through it
+        //.with_sprite_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, 32)
         .with_simple_console_no_bg(SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, "terminal8x8.png")
         .build()?;
     main_loop(context, State::new())

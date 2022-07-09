@@ -19,7 +19,7 @@ pub struct Template {
 
 #[derive(Clone, Deserialize, Debug, PartialEq)]
 pub enum EntityType {
-    Enemy, Item
+    Enemy, Item, Score
 }
 
 #[derive(Clone, Deserialize, Debug)]
@@ -67,7 +67,9 @@ impl Templates {
         template: &Template,
         commands: &mut legion::systems::CommandBuffer
     ) {
-        let entity = commands.push((    //puch tuple of components to define the new entity
+       /*  println!("spawning: {}", template.name.clone());
+        println!("at : {:?}", pt.clone()); */
+        let entity = commands.push((    //push tuple of components to define the new entity
             pt.clone(), //clone the position from pt to use it as a new component
             Render {
                 color: ColorPair::new(WHITE, BLACK),
@@ -78,6 +80,7 @@ impl Templates {
 
         match template.entity_type {
             EntityType::Item => commands.add_component(entity, Item{}),
+            EntityType::Score => commands.add_component(entity, ScoreItem{}),
             EntityType::Enemy => {
                 commands.add_component(entity, Enemy{});
                 commands.add_component(entity, FieldOfView::new(6));
@@ -94,7 +97,10 @@ impl Templates {
                 match provides.as_str() {
                     "Healing" => commands.add_component(entity, ProvidesHealing{amount: *n}),
                     "MagicMap" => commands.add_component(entity, ProvidesDungeonMap{}),
-                    _ => println!("Warning: we don't know hot to provide {}", provides),
+                    "NVision" => commands.add_component(entity, ProvidesNVision{}),
+                    "Armor" => commands.add_component(entity, ProvidesArmor{amount: *n}),
+                    "Score" => commands.add_component(entity, ProvidesScore{amount: *n}),
+                    _ => println!("Warning: we don't know how to provide {}", provides),
                 }
             })
         }

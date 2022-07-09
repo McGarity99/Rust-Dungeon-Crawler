@@ -3,11 +3,19 @@ use crate::prelude::*;
 #[system]
 #[read_component(WantsToAttack)]
 #[read_component(Player)]
+#[read_component(ProvidesScore)]
+#[write_component(Score)]
 #[write_component(Health)]
+#[write_component(Armor)]
 #[read_component(Damage)]
 #[read_component(Carried)]
 pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
     let mut attackers = <(Entity, &WantsToAttack)>::query();
+    let mut take_health = false;
+    let mut health_damage = 0;
+
+    /* let mut score_query = <&Score>::query().filter(component::<Player>());
+    let mut player_score = score_query.iter(ecs).nth(0).unwrap(); */
 
     let victims: Vec<(Entity, Entity, Entity)> = attackers
         .iter(ecs)
@@ -30,29 +38,82 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
         } else {
             0
         };
-        let weapon_damage: i32 = <(&Carried, &Damage)>::query().iter(ecs)
+        let weapon_damage: i32 = <(&Carried, &Damage)>::query()
+            .iter(ecs)
             .filter(|(carried, _)| carried.0 == *attacker)
             .map(|(_, dmg)| dmg.0)
             .sum();
         let final_damage = base_damage + weapon_damage;
+        if let Ok(mut armor) = ecs.entry_mut(*victim).unwrap().get_component_mut::<Armor>() {
+            if armor.current > 0 {
+                println!("damage received: {}", final_damage);
+                let mut new_damage = final_damage - armor.current; //calculate damage taken by armor
+                println!("new damage: {}", new_damage);
+                if new_damage < 0 {
+                    //if armor absorbs all damage with armor points left over
+                    armor.current = new_damage * -1;
+                    println!("armor absorbed all dmg");
+                } else if new_damage == 0 {
+                    //if armor absorbs all damage with no armor points left over
+                    armor.current = 0;
+                    println!("armor absorbed all, no armor left");
+                } else {
+                    //if damage is enough to "break" armor and damage player's health
+                    take_health = true;
+                    armor.current = 0;
+                    health_damage = new_damage;
+                    println!("armor broken");
+                }
+            } else {
+                take_health = true; //move to take away health if armor is 0
+                health_damage = final_damage;
+            }
+        } else {
+            println!("No armor component for victim: {:?}", victim);
+        }
         if let Ok(mut health) = ecs
             .entry_mut(*victim)
             .unwrap()
             .get_component_mut::<Health>()
         {
-            health.current -= final_damage;
+            if is_player && take_health {
+                //if player is attacked (and no armor or broken armor)
+                health.current -= health_damage;
+            } else if !is_player {
+                //if monster is attacked (apply player's final_damage)
+                health.current -= final_damage;
+            }
             if health.current < 1 && !is_player {
-                commands.remove(*victim);
+                if let Ok(ProvidesScore) = ecs
+                    .entry_mut(*victim)
+                    .unwrap()
+                    .get_component::<ProvidesScore>()
+                {
+                    let score_yield = if let Ok(score) = ecs
+                        .entry_ref(*victim)
+                        .unwrap()
+                        .get_component::<ProvidesScore>() {
+                            println!("score yield: {:?}", score.amount);    //debugging purposes, remove later
+                            let mut player_query = <Entity>::query().filter(component::<Player>()); //query to get Entities with Player tag
+                            let player_entity = player_query.iter(ecs).nth(0).unwrap(); //get player entity
+                            if let Ok(mut p_score) = ecs.clone().entry_mut(*player_entity) //get mutable access to Player's score by cloning the SubWorld
+                                .unwrap()
+                                .get_component_mut::<Score>()
+                            {
+                                p_score.current = i32::min(p_score.max, p_score.current + score.amount);    //add to Player's score without going over the limit
+                            }
+                        };
+                }
+                commands.remove(*victim);   //enemy is slain, so remove it from the game
             }
         }
-        
-        
+
         /* if let Ok(mut health) = ecs
             .entry_mut(*victim)
             .unwrap()
             .get_component_mut::<Health>()
         {
-            
+
             println!("combat.rs Health before attack: {}", health.current);
             health.current -= 1;
             if health.current < 1 && !is_player {

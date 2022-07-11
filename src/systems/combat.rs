@@ -4,6 +4,7 @@ use crate::prelude::*;
 #[read_component(WantsToAttack)]
 #[read_component(Player)]
 #[read_component(ProvidesScore)]
+#[read_component(IgnoresArmor)]
 #[write_component(Score)]
 #[write_component(Health)]
 #[write_component(Armor)]
@@ -44,29 +45,30 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
             .map(|(_, dmg)| dmg.0)
             .sum();
         let final_damage = base_damage + weapon_damage;
+        let is_angel: bool = ecs.entry_mut(*attacker).unwrap().get_component::<IgnoresArmor>().is_ok(); 
         if let Ok(mut armor) = ecs.entry_mut(*victim).unwrap().get_component_mut::<Armor>() {
-            if armor.current > 0 {
-                println!("damage received: {}", final_damage);
-                let mut new_damage = final_damage - armor.current; //calculate damage taken by armor
-                println!("new damage: {}", new_damage);
-                if new_damage < 0 {
-                    //if armor absorbs all damage with armor points left over
-                    armor.current = new_damage * -1;
-                    println!("armor absorbed all dmg");
-                } else if new_damage == 0 {
-                    //if armor absorbs all damage with no armor points left over
-                    armor.current = 0;
-                    println!("armor absorbed all, no armor left");
-                } else {
-                    //if damage is enough to "break" armor and damage player's health
-                    take_health = true;
-                    armor.current = 0;
-                    health_damage = new_damage;
-                    println!("armor broken");
-                }
-            } else {
-                take_health = true; //move to take away health if armor is 0
+            if is_angel {   //if being attacked by Fallen Angel (ignores armor)
+                take_health = true;
                 health_damage = final_damage;
+            } else {    //attacked by any other enemy type
+                if armor.current > 0 {
+                    let new_damage = final_damage - armor.current; //calculate damage taken by armor
+                    if new_damage < 0 {
+                        //if armor absorbs all damage with armor points left over
+                        armor.current = new_damage * -1;
+                    } else if new_damage == 0 {
+                        //if armor absorbs all damage with no armor points left over
+                        armor.current = 0;
+                    } else {
+                        //if damage is enough to "break" armor and damage player's health
+                        take_health = true;
+                        armor.current = 0;
+                        health_damage = new_damage;
+                    }
+                } else {
+                    take_health = true; //move to take away health if armor is 0
+                    health_damage = final_damage;
+                }
             }
         } else {
             println!("No armor component for victim: {:?}", victim);

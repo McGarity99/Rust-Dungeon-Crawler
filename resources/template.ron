@@ -14,7 +14,7 @@ Templates(
         ),
         Template(
             entity_type: Item,
-            name: "NV Goggles", glyph: 'Ω', levels : [0, 1, 2],
+            name: "NV Goggles", glyph: 'B', levels : [0, 1, 2],
             provides: Some([("NVision", 0)]),
             frequency: 1
         ),
@@ -38,17 +38,17 @@ Templates(
         ),
         Template(
             entity_type: Enemy,
-            name: "Goblin", glyph: 'g', levels: [0, 1, 2],
+            name: "Goblin", glyph: 'g', levels: [0],
             hp: Some(1),
-            frequency: 3,
+            frequency: 2,
             base_damage: Some(1),
             provides: Some([("Score", 50)])
         ),
         Template(
             entity_type: Enemy,
-            name: "Orc", glyph: 'o', levels: [0, 1, 2],
+            name: "Orc", glyph: 'o', levels: [0, 1],
             hp: Some(2),
-            frequency: 3,
+            frequency: 2,
             base_damage: Some(1),
             provides: Some([("Score", 75)])
         ),
@@ -62,7 +62,7 @@ Templates(
         ),
         Template(
             entity_type: Enemy,
-            name: "Ducephalon", glyph: 'E', levels: [0, 1, 2],
+            name: "Ducephalon", glyph: 'E', levels: [2, 3],
             hp: Some(4),
             frequency: 1,
             base_damage: Some(4),
@@ -75,6 +75,22 @@ Templates(
             frequency: 1,
             base_damage: Some(3),
             provides: Some([("Score", 125)])
+        ),
+        Template(
+            entity_type: Enemy,
+            name: "Fallen Angel", glyph: 'e', levels: [2],
+            hp: Some(6),
+            frequency: 1,
+            base_damage: Some(2),
+            provides: Some([("Score", 150)])
+        ),
+        Template(
+            entity_type: Enemy,
+            name: "Okulos", glyph: 'Ω', levels: [1],
+            hp: Some(3),
+            frequency: 1,
+            base_damage: Some(2),
+            provides: Some([("Score", 100)])
         ),
         Template(
             entity_type: Item,

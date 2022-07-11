@@ -6,6 +6,7 @@ use crate::prelude::*;
 #[read_component(FieldOfView)]
 #[read_component(Health)]
 #[read_component(Point)]
+#[read_component(AllSeeing)]
 pub fn chasing(
     #[resource] map: &Map,
     ecs: &SubWorld,
@@ -28,9 +29,14 @@ pub fn chasing(
     );
 
     movers.iter(ecs).for_each(|(entity, pos, _, fov)| {  //iterate over all entities with the ChasingPlayer tag
-        if !fov.visible_tiles.contains(&player_pos) {   //ensure monsters only chase the player if they can see them
-            return;
+        if ecs.clone().entry_mut(*entity).unwrap().get_component::<AllSeeing>().is_ok() == false {
+            if !fov.visible_tiles.contains(&player_pos) {   //ensure monsters only chase the player if they can see them (does not apply to Okulos)
+                return;
+            }
         }
+        /* if !fov.visible_tiles.contains(&player_pos) {   //ensure monsters only chase the player if they can see them
+            return;
+        } */
         let idx = map_idx(pos.x, pos.y);
         if let Some(destination) = DijkstraMap::find_lowest_exit(&dijkstra_map, idx, map) { //f_l_e function finds the exit with the lowest distance to your target point
             let distance = DistanceAlg::Pythagoras.distance2d(*pos, *player_pos);   //use Pythagoras' algorithm to determine distance to the player

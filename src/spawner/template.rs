@@ -84,7 +84,15 @@ impl Templates {
             EntityType::Enemy => {
                 commands.add_component(entity, Enemy{});
                 commands.add_component(entity, FieldOfView::new(6));
+                if template.name.eq("Okulos") {
+                    let fov = FieldOfView::new(6);
+                    commands.add_component(entity, fov);
+                    commands.add_component(entity, AllSeeing{});
+                }   //allow Okulos to "see" the player from anywhere on the map
                 commands.add_component(entity, ChasingPlayer{});
+                if template.name.eq("Fallen Angel") {
+                    commands.add_component(entity, IgnoresArmor{});
+                }   //allow Fallen Angel enemy type to ignore player's armor
                 commands.add_component(entity, Health {
                     current: template.hp.unwrap(),
                     max: template.hp.unwrap()

@@ -7,14 +7,14 @@ The game was developed through the book "Hands-on Rust", by Herbert Wolverson (I
 <br />
 <br />
 ## Ideas for Expansion
-* [ ] Change tileset from fantasy to sci-fi/horror theme <br />
+* [x] Change tileset from fantasy to sci-fi/horror theme <br />
 * [x] Increase enemy variety and complexity <br />
 * [ ] Introduce new map elements (locked doors, keys, etc.) <br />
 ### Introduce new items for gameplay: <br />
-* [ ] NV Goggles: increase player FOV and apply green tint to environment <br />
+* [ ] Item to increase player's Field of Vision attribute <br />
 * [x] Attack armor: shield player from incoming damage until armor is depleted <br />
 * [ ] Introduce environmental hazards: <br />
-* [ ] Poison gas - could require gas mask item to traverse <br />
+* [ ] Poison floor / fire floor (could require special item to traverse safely) <br />
 ### Other Mechanics: <br />
 * [x] Add a scoring mechanism <br />
 * [ ] Add gameplay music and/or sound fx

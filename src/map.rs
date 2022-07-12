@@ -6,6 +6,7 @@ pub enum TileType {
     Wall,
     Floor,
     PoisonFloor,
+    Decorative,
     Exit
 }
 

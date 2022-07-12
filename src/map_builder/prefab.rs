@@ -3,14 +3,14 @@ use crate::prelude::*;
 const FORTRESS: (&str, i32, i32) = ("
 ------------
 ---######---
----#----#---
+---d----#---
 ---#-M--#---
 -###----###-
 --M------M--
 -###----###-
 ---#----#---
 ---#----#---
----######---
+---###d##---
 ------------
 ", 12, 11);
 
@@ -18,44 +18,44 @@ const LABYRINTH: (&str, i32, i32) = ("
 -------------
 -###########-
 -#-#-----#M#-
--#---#-#---#-
+-#---d-#---#-
 ---#-#M#---#-
--#-#-#-#####-
+-#-#-#-##d##-
 -#-#-#-#---#-
--#####---#-#-
+-#d###---#-#-
 -#M----#-#-#-
 -#########-#-
 -------------
 ", 13, 11);
 
 const MAZE: (&str, i32, i32) = ("
----------------
-#######-#######
-##----------###
-###-##-##-#-###
-###-#####-#####
-##-----M--#####
-##-########--##
-##-##---#-----#
-#M----#---###M#
-#######-#######
----------------
-", 15, 11);
+-----------------
+-#######-#######-
+-##----------###-
+-###-d#-##-#-###-
+-###-#####-#####-
+-##-----M--##d##-
+-##-########--##-
+-##-##---#-----#-
+-#M----#---###M#-
+-###dd##-#######-
+-----------------
+", 17, 11);
 
 const TOMB: (&str, i32, i32) = ("
----------
-##-#-#-##
-#--#-#-M#
-#-#---#-#
-#-------#
-#---M---#
-#---M---#
-####-####
-#-#---#-#
-#M-#-#--#
-##-#-#-##
----------
-", 9, 12);
+-----------
+-d#-#-#-##-
+-#--#-#-M#-
+-#-#---#-#-
+-#-------d-
+-#---M---#-
+-#---M---#-
+-##d#-####-
+-#-#---#-#-
+-#M-#-#--#-
+-##-#-#-##-
+-----------
+", 11, 12);
 
 pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
     let mut structure = ("", 0, 0);
@@ -82,8 +82,8 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
             let dimensions = Rect::with_size(   //create a Rect type starting at a random map location, with the height and width of the vault
                 rng.range(0, SCREEN_WIDTH - structure.1),
                 rng.range(0, SCREEN_HEIGHT - structure.2),
-                TOMB.1,
-                TOMB.2
+                structure.1,
+                structure.2
             );
 
             let mut can_place = false;
@@ -119,6 +119,7 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
                         '-' => mb.map.tiles[idx] = TileType::Floor,
                         '#' => mb.map.tiles[idx] = TileType::Wall,
                         'y' => mb.map.tiles[idx] = TileType::PoisonFloor,
+                        'd' => mb.map.tiles[idx] = TileType::Decorative,
                         _ => println!("No idea what to do with {}", c)
                     }
                     i += 1;

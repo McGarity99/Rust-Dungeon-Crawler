@@ -23,7 +23,8 @@ pub fn spawn_player(ecs: &mut World, pos: Point) { //calling this function adds 
             },
             Score {
                 current: 0,
-                max: std::i32::MAX
+                max: std::i32::MAX,
+                level_theme: 0
             },
             FieldOfView::new(REG_FOV),
             Damage(1)
@@ -39,7 +40,7 @@ pub fn spawn_amulet_of_yala(ecs: &mut World, pos: Point) {
                 color: ColorPair::new(WHITE, BLACK),
                 glyph: to_cp437('|')
             },
-            Name("Amulet of Yala".to_string())
+            Name("Amulet of Yala".to_string()),
         )
     );
 }

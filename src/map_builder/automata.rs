@@ -35,6 +35,8 @@ impl CellularAutomataArchitect {
             let roll = rng.range(0,100);
             if roll > 55 {
                 *t = TileType::Floor;
+            /* } else if roll > 65 {
+                *t = TileType::Decorative; */
             } else {
                 *t = TileType::Wall;
             }

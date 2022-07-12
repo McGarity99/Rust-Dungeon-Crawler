@@ -24,36 +24,10 @@ pub fn hud(ecs: &SubWorld) {
         .iter(ecs)
         .nth(0)
         .unwrap();
-    /* match player_health {
-        Some(_) => {
-            let p_h = player_health.unwrap();
-
-            let mut draw_batch = DrawBatch::new();
-            draw_batch.target(2);   //draw to hud console layer
-            draw_batch.print_centered(1, "Explore the Catacombs. Cursor Keys to move.");    //greet the player
-            draw_batch.bar_horizontal(
-                Point::zero(),
-                SCREEN_WIDTH * 2,
-                p_h.current,  //current value of health bar
-                p_h.max,      //max value of health bar (bracket-lib will scale for you)
-                ColorPair::new(RED, BLACK)  //color of full, empty
-            );  //draw health bar
-            draw_batch.print_color_centered(
-                0,
-                format!("Health: {} / {} ",
-                p_h.current,
-                p_h.max
-                ),
-                ColorPair::new(WHITE, RED)
-            );
-            draw_batch.submit(10000).expect("Batch error");
-        },
-        _ => {}
-    } */
 
         let mut draw_batch = DrawBatch::new();
         draw_batch.target(2);   //draw to hud console layer
-        draw_batch.print_centered(0, "Explore the Catacombs. Cursor Keys to move.");    //greet the player
+        draw_batch.print_centered(0, "Explore the Environment. Cursor Keys to move.");    //greet the player
         draw_batch.bar_horizontal(
             Point::new(2, 2),
             SCREEN_WIDTH,
@@ -99,6 +73,18 @@ pub fn hud(ecs: &SubWorld) {
             Point::new(SCREEN_WIDTH * 2, 3),
             format!("Score: {}", player_score.current),
             ColorPair::new(YELLOW, BLACK)
+        );
+
+        let level_name = match player_score.level_theme {
+            0 => "Forgotten Forest",
+            1 => "Decrepit Dungeon",
+            2 => "Forsaken Temple",
+            _ => "Netherworld"
+        };
+        draw_batch.print_color_right(
+            Point::new(SCREEN_WIDTH * 2, 5),
+            format!("{}", level_name),
+            ColorPair::new(RED, GREY)
         );
 
         let player = <(Entity, &Player)>::query()

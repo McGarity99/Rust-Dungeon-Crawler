@@ -70,11 +70,11 @@ Templates(
         ),
         Template(
             entity_type: Enemy,
-            name: "Abomination", glyph: 'u', levels: [1, 2],
+            name: "Visage", glyph: 'u', levels: [1, 2, 3],
             hp: Some(3),
             frequency: 1,
-            base_damage: Some(3),
-            provides: Some([("Score", 125)])
+            base_damage: Some(2),
+            provides: Some([("Score", 100)])
         ),
         Template(
             entity_type: Enemy,

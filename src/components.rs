@@ -45,7 +45,8 @@ pub struct Armor {
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Score {
     pub current: i32,
-    pub max: i32
+    pub max: i32,
+    pub level_theme: i32
 }
 
 #[derive(Clone, PartialEq)]
@@ -142,3 +143,11 @@ pub struct IgnoresArmor;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct AllSeeing;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct StealsScore {
+    pub amount: i32
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct LevelTheme(pub String);

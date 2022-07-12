@@ -84,9 +84,10 @@ impl Templates {
             EntityType::Enemy => {
                 commands.add_component(entity, Enemy{});
                 commands.add_component(entity, FieldOfView::new(6));
+                if template.name.eq("Visage") {
+                    commands.add_component(entity, StealsScore{amount: SCORE_STEAL_AMT});
+                }   //allow the Visage to steal player's score when attacking
                 if template.name.eq("Okulos") {
-                    let fov = FieldOfView::new(6);
-                    commands.add_component(entity, fov);
                     commands.add_component(entity, AllSeeing{});
                 }   //allow Okulos to "see" the player from anywhere on the map
                 commands.add_component(entity, ChasingPlayer{});

@@ -17,6 +17,8 @@ mod prelude {
     pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT / 2;
     pub const REG_FOV: i32 = 8;
     pub const NV_FOV: i32 = 12;
+    pub const SCORE_STEAL_AMT: i32 = 50;
+    pub const MAX_LEVEL: u32 = 3;
     pub use crate::map::*;
     pub use crate::map_builder::*;
     pub use crate::camera::*;
@@ -41,7 +43,7 @@ impl State {
         let mut ecs = World::default();
         let mut resources = Resources::default();
         let mut rng = RandomNumberGenerator::new();
-        let mut map_builder = MapBuilder::new(&mut rng);
+        let mut map_builder = MapBuilder::new(&mut rng, 0);
         spawn_player(&mut ecs, map_builder.player_start);
         //spawn_amulet_of_yala(&mut ecs, map_builder.amulet_start);
         let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);
@@ -105,7 +107,7 @@ impl State {
         self.ecs = World::default();
         self.resources = Resources::default();
         let mut rng = RandomNumberGenerator::new();
-        let mut map_builder = MapBuilder::new(&mut rng);
+        let mut map_builder = MapBuilder::new(&mut rng, 0);
         spawn_player(&mut self.ecs, map_builder.player_start);
         //spawn_amulet_of_yala(&mut self.ecs, map_builder.amulet_start);
         let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);
@@ -116,11 +118,6 @@ impl State {
             0,
             &map_builder.monster_spawns
         );
-        /* map_builder.rooms
-            .iter()
-            .skip(1)
-            .map(|r| r.center())
-            .for_each(|pos| spawn_entity(&mut self.ecs, &mut rng, pos)); */
             self.resources.insert(map_builder.map);
             self.resources.insert(Camera::new(map_builder.player_start));
             self.resources.insert(TurnState::AwaitingInput);
@@ -133,7 +130,12 @@ impl State {
             .iter(&mut self.ecs)
             .nth(0)
             .unwrap();
-        
+
+        let mut level_id: i32 = 0;
+        if let Ok(p_score) = self.ecs.entry_mut(player_entity).unwrap().get_component_mut::<Score>() {
+            p_score.level_theme += 1;
+            level_id = p_score.level_theme;
+        }   //advance level id token to spawn correct level theme
             use std::collections::HashSet;
             let mut entities_to_keep = HashSet::new();
             entities_to_keep.insert(player_entity); //we want to keep the player obviously
@@ -157,7 +159,7 @@ impl State {
                 .for_each(|fov| fov.is_dirty = true);   //flag the player's FOV as dirty so that it doesn't carry over to next dungeon level
 
             let mut rng = RandomNumberGenerator::new();
-            let mut map_builder = MapBuilder::new(&mut rng);
+            let mut map_builder = MapBuilder::new(&mut rng, level_id);
 
             let mut map_level = 0;
             <(&mut Player, &mut Point)>::query()
@@ -170,7 +172,7 @@ impl State {
                 }
             );
 
-            if map_level == 2 {
+            if map_level == MAX_LEVEL {
                 spawn_amulet_of_yala(&mut self.ecs, map_builder.amulet_start);
             } else {
                 let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);

@@ -5,6 +5,7 @@ use crate::prelude::*;
 #[read_component(Player)]
 #[read_component(ProvidesScore)]
 #[read_component(IgnoresArmor)]
+#[read_component(StealsScore)]
 #[write_component(Score)]
 #[write_component(Health)]
 #[write_component(Armor)]
@@ -45,6 +46,7 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
             .map(|(_, dmg)| dmg.0)
             .sum();
         let final_damage = base_damage + weapon_damage;
+        let is_visage: bool = ecs.entry_mut(*attacker).unwrap().get_component::<StealsScore>().is_ok();
         let is_angel: bool = ecs.entry_mut(*attacker).unwrap().get_component::<IgnoresArmor>().is_ok(); 
         if let Ok(mut armor) = ecs.entry_mut(*victim).unwrap().get_component_mut::<Armor>() {
             if is_angel {   //if being attacked by Fallen Angel (ignores armor)
@@ -71,9 +73,9 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                 }
             }
         } else {
-            println!("No armor component for victim: {:?}", victim);
+            //println!("No armor component for victim: {:?}", victim);
         }
-        if let Ok(mut health) = ecs
+        if let Ok(mut health) = ecs.clone()
             .entry_mut(*victim)
             .unwrap()
             .get_component_mut::<Health>()
@@ -81,6 +83,13 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
             if is_player && take_health {
                 //if player is attacked (and no armor or broken armor)
                 health.current -= health_damage;
+                if is_visage {
+                    if let Ok(mut score_steal) = ecs.clone().entry_mut(*attacker).unwrap().get_component::<StealsScore>() {
+                        if let Ok(mut p_score) = ecs.clone().entry_mut(*victim).unwrap().get_component_mut::<Score>() {
+                            p_score.current = i32::max(0, p_score.current - score_steal.amount);
+                        }
+                    }
+                }
             } else if !is_player {
                 //if monster is attacked (apply player's final_damage)
                 health.current -= final_damage;
@@ -95,7 +104,6 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                         .entry_ref(*victim)
                         .unwrap()
                         .get_component::<ProvidesScore>() {
-                            println!("score yield: {:?}", score.amount);    //debugging purposes, remove later
                             let mut player_query = <Entity>::query().filter(component::<Player>()); //query to get Entities with Player tag
                             let player_entity = player_query.iter(ecs).nth(0).unwrap(); //get player entity
                             if let Ok(mut p_score) = ecs.clone().entry_mut(*player_entity) //get mutable access to Player's score by cloning the SubWorld
@@ -109,20 +117,6 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                 commands.remove(*victim);   //enemy is slain, so remove it from the game
             }
         }
-
-        /* if let Ok(mut health) = ecs
-            .entry_mut(*victim)
-            .unwrap()
-            .get_component_mut::<Health>()
-        {
-
-            println!("combat.rs Health before attack: {}", health.current);
-            health.current -= 1;
-            if health.current < 1 && !is_player {
-                commands.remove(*victim);
-            }
-            println!("combat.rs Health after attack: {}", health.current)
-        } */
         commands.remove(*message);
     })
 }

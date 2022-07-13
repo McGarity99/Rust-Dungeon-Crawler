@@ -6,7 +6,7 @@ const FORTRESS: (&str, i32, i32) = ("
 ---d----#---
 ---#-M--#---
 -###----###-
---M------M--
+--M---y--M--
 -###----###-
 ---#----#---
 ---#----#---
@@ -17,7 +17,7 @@ const FORTRESS: (&str, i32, i32) = ("
 const LABYRINTH: (&str, i32, i32) = ("
 -------------
 -###########-
--#-#-----#M#-
+-#-#--y--#M#-
 -#---d-#---#-
 ---#-#M#---#-
 -#-#-#-##d##-
@@ -31,7 +31,7 @@ const LABYRINTH: (&str, i32, i32) = ("
 const MAZE: (&str, i32, i32) = ("
 -----------------
 -#######-#######-
--##----------###-
+-##-------y--###-
 -###-d#-##-#-###-
 -###-#####-#####-
 -##-----M--##d##-
@@ -47,7 +47,7 @@ const TOMB: (&str, i32, i32) = ("
 -d#-#-#-##-
 -#--#-#-M#-
 -#-#---#-#-
--#-------d-
+-#---y---d-
 -#---M---#-
 -#---M---#-
 -##d#-####-
@@ -119,7 +119,12 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
                         '-' => mb.map.tiles[idx] = TileType::Floor,
                         '#' => mb.map.tiles[idx] = TileType::Wall,
                         'y' => mb.map.tiles[idx] = TileType::PoisonFloor,
-                        'd' => mb.map.tiles[idx] = TileType::Decorative,
+                        'd' => {
+                            match rng.range(0, 2) {
+                                0 => mb.map.tiles[idx] = TileType::Decorative,
+                                _ => mb.map.tiles[idx] = TileType::OtherDecorative
+                            }
+                        }
                         _ => println!("No idea what to do with {}", c)
                     }
                     i += 1;

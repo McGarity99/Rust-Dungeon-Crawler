@@ -30,6 +30,12 @@ Templates(
             provides: Some([("Armor", 5)]),
             frequency: 2
         ),
+        Template (
+            entity_type: Item,
+            name: "Anti-poison", glyph: 'p', levels: [0, 1, 2, 3],
+            provides: Some([("PoisonResistance", 1)]),
+            frequency: 1
+        ),
         Template(
             entity_type: Score,
             name: "Treasure", glyph: '&', levels : [0, 1, 2],

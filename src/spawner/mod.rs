@@ -24,7 +24,9 @@ pub fn spawn_player(ecs: &mut World, pos: Point) { //calling this function adds 
             Score {
                 current: 0,
                 max: std::i32::MAX,
-                level_theme: 0
+                level_theme: 0,
+                poison_shield: START_P_RESISTANCE,
+                max_poison_shield: MAX_P_RESISTANCE
             },
             FieldOfView::new(REG_FOV),
             Damage(1)

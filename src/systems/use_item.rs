@@ -9,6 +9,8 @@ use crate::prelude::*;
 #[read_component(ProvidesArmor)]
 #[write_component(FieldOfView)]
 #[read_component(ProvidesNVision)]
+#[read_component(ProvidesPoisonR)]
+#[write_component(Score)]
 #[read_component(Player)]
 pub fn use_item(
     ecs: &mut SubWorld,
@@ -35,6 +37,7 @@ pub fn use_item(
 
     let mut healing_to_apply = Vec::<(Entity, i32)>::new();
     let mut armor_to_apply = Vec::<(Entity, i32)>::new();
+    let mut poison_res_to_apply = Vec::<(Entity, i32)>::new();
     <(Entity, &ActivateItem)>::query().iter(ecs)
     .for_each(|(entity, activate)| {
         //println!("activate: {:?}", activate);
@@ -49,6 +52,9 @@ pub fn use_item(
             if let Ok(armor) = item.get_component::<ProvidesArmor>() {
                 println!("armor to apply pushing: {}", armor.amount);
                 armor_to_apply.push((activate.used_by, armor.amount));
+            }
+            if let Ok(poison_res) = item.get_component::<ProvidesPoisonR>() {
+                poison_res_to_apply.push((activate.used_by, poison_res.amount));
             }
         }
         commands.remove(activate.item);
@@ -69,4 +75,12 @@ pub fn use_item(
             }
         }
     }   //apply armor to the target, taking min between max and current + amount, to avoid going over the maximum
+
+    for p_r in poison_res_to_apply.iter() {
+        if let Ok(mut target) = ecs.entry_mut(p_r.0) {
+            if let Ok(score) = target.get_component_mut::<Score>() {
+                score.poison_shield = i32::min(score.max_poison_shield, score.poison_shield + p_r.1);
+            }
+        }
+    }
 }

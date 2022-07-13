@@ -13,8 +13,8 @@ The game was developed through the book "Hands-on Rust", by Herbert Wolverson (I
 ### Introduce new items for gameplay: <br />
 * [ ] Item to increase player's Field of Vision attribute <br />
 * [x] Attack armor: shield player from incoming damage until armor is depleted <br />
-* [ ] Introduce environmental hazards: <br />
-* [ ] Poison floor / fire floor (could require special item to traverse safely) <br />
+* [x] Introduce environmental hazards: <br />
+* [x] Poison floor / fire floor (could require special item to traverse safely) <br />
 ### Other Mechanics: <br />
 * [x] Add a scoring mechanism <br />
 * [ ] Add gameplay music and/or sound fx

@@ -74,6 +74,11 @@ pub fn hud(ecs: &SubWorld) {
             format!("Score: {}", player_score.current),
             ColorPair::new(YELLOW, BLACK)
         );
+        draw_batch.print_color_right(
+            Point::new(SCREEN_WIDTH * 2, 4),
+            format!("Poison Resistance: {}", player_score.poison_shield),
+            ColorPair::new(GHOSTWHITE, BLACK)
+        );
 
         let level_name = match player_score.level_theme {
             0 => "Forgotten Forest",

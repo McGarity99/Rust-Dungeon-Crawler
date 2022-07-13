@@ -109,6 +109,7 @@ impl Templates {
                     "NVision" => commands.add_component(entity, ProvidesNVision{}),
                     "Armor" => commands.add_component(entity, ProvidesArmor{amount: *n}),
                     "Score" => commands.add_component(entity, ProvidesScore{amount: *n}),
+                    "PoisonResistance" => commands.add_component(entity, ProvidesPoisonR{amount: *n}),
                     _ => println!("Warning: we don't know how to provide {}", provides),
                 }
             })

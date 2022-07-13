@@ -46,7 +46,9 @@ pub struct Armor {
 pub struct Score {
     pub current: i32,
     pub max: i32,
-    pub level_theme: i32
+    pub level_theme: i32,
+    pub poison_shield: i32,
+    pub max_poison_shield: i32
 }
 
 #[derive(Clone, PartialEq)]
@@ -123,6 +125,11 @@ pub struct ProvidesScore {
     pub amount: i32
 }
 
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ProvidesPoisonR {
+    pub amount: i32
+}
+
 #[derive(Clone, PartialEq, Debug)]
 pub struct Carried(pub Entity);
 
@@ -151,3 +158,8 @@ pub struct StealsScore {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct LevelTheme(pub String);
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct PoisonShield {
+    pub amount: i32
+}

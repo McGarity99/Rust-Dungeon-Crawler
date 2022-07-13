@@ -19,6 +19,10 @@ mod prelude {
     pub const NV_FOV: i32 = 12;
     pub const SCORE_STEAL_AMT: i32 = 50;
     pub const MAX_LEVEL: u32 = 3;
+    pub const START_LEVEL: u32 = 0; //for debugging purposes (controls the theme the player starts in [0 Forest, 1 Dungeon, 2 Temple, 3 Volcano])
+    pub const POISON_DMG: i32 = 1;  //const representing damage dealt by poison floors
+    pub const START_P_RESISTANCE: i32 = 2;  //amount of poison resistance the player starts the game with
+    pub const MAX_P_RESISTANCE: i32 = 5;    //max poison resistance the player can have
     pub use crate::map::*;
     pub use crate::map_builder::*;
     pub use crate::camera::*;
@@ -43,7 +47,7 @@ impl State {
         let mut ecs = World::default();
         let mut resources = Resources::default();
         let mut rng = RandomNumberGenerator::new();
-        let mut map_builder = MapBuilder::new(&mut rng, 0);
+        let mut map_builder = MapBuilder::new(&mut rng, START_LEVEL as i32);
         spawn_player(&mut ecs, map_builder.player_start);
         //spawn_amulet_of_yala(&mut ecs, map_builder.amulet_start);
         let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);
@@ -51,7 +55,7 @@ impl State {
         spawn_level(
             &mut ecs,
             &mut rng,
-            0,
+            START_LEVEL as usize,
             &map_builder.monster_spawns
         );
         /* map_builder.rooms
@@ -115,7 +119,7 @@ impl State {
         spawn_level(
             &mut self.ecs,
             &mut rng,
-            0,
+            START_LEVEL as usize,
             &map_builder.monster_spawns
         );
             self.resources.insert(map_builder.map);

@@ -13,8 +13,9 @@ impl MapTheme for DungeonTheme {
         match tile_type {
             TileType::Floor => to_cp437('.'),
             TileType::Wall => to_cp437('#'),
-            TileType::PoisonFloor => to_cp437('y'),
+            TileType::PoisonFloor => to_cp437('-'),
             TileType::Decorative => to_cp437('M'),
+            TileType::OtherDecorative => to_cp437('3'),
             TileType::Exit => to_cp437('>')
         }
     }
@@ -28,7 +29,8 @@ impl MapTheme for ForestTheme {
             TileType::Floor => to_cp437(';'),
             TileType::Wall => to_cp437('"'),
             TileType::PoisonFloor => to_cp437('y'),
-            TileType::Decorative => to_cp437('^'),
+            TileType::Decorative => to_cp437('$'),
+            TileType::OtherDecorative => to_cp437('%'),
             TileType::Exit => to_cp437('>')
         }
     }
@@ -47,8 +49,9 @@ impl MapTheme for VolcanoTheme {
         match tile_type {
             TileType::Floor => to_cp437('G'),
             TileType::Wall => to_cp437('I'),
-            TileType::PoisonFloor => to_cp437('y'),
+            TileType::PoisonFloor => to_cp437('J'),
             TileType::Decorative => to_cp437('H'),
+            TileType::OtherDecorative => to_cp437('X'),
             TileType::Exit => to_cp437('>')
         }
     }
@@ -64,11 +67,13 @@ pub struct TempleTheme{}
 
 impl MapTheme for TempleTheme {
     fn tile_to_render(&self, tile_type: TileType) -> FontCharType {
+        let mut rng = RandomNumberGenerator::new();
         match tile_type {
             TileType::Floor => to_cp437(')'),
             TileType::Wall => to_cp437('('),
-            TileType::PoisonFloor => to_cp437('y'),
+            TileType::PoisonFloor => to_cp437('*'),
             TileType::Decorative => to_cp437('='),
+            TileType::OtherDecorative => to_cp437('+'),
             TileType::Exit => to_cp437('>')
         }
     }

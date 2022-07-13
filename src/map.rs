@@ -7,6 +7,7 @@ pub enum TileType {
     Floor,
     PoisonFloor,
     Decorative,
+    OtherDecorative,
     Exit
 }
 
@@ -23,23 +24,6 @@ impl Map {
             revealed_tiles: vec![false; NUM_TILES] 
         }
     }
-
-    /* pub fn render(&self, ctx: &mut BTerm) {
-        for y in 0..SCREEN_HEIGHT {     //navigate row
-            for x in 0..SCREEN_WIDTH {  //navigate col
-                let idx = map_idx(x, y);    //get index of current tile
-                match self.tiles[idx] {
-                    TileType::Floor => {    //if floor, render as .
-                        ctx.set(x, y, RED, BLACK, to_cp437('.'));
-                    },
-
-                    TileType::Wall => {     //if wall, render as #
-                        ctx.set(x, y, GREEN, BLACK, to_cp437('#'));
-                    }
-                }
-            }
-        }
-    } */
 
     pub fn in_bounds(&self, point: Point) -> bool {
         point.x >= 0 && point.x < SCREEN_WIDTH

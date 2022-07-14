@@ -19,7 +19,7 @@ pub struct Template {
 
 #[derive(Clone, Deserialize, Debug, PartialEq)]
 pub enum EntityType {
-    Enemy, Item, Score
+    Enemy, Item, Score, FovBoost
 }
 
 #[derive(Clone, Deserialize, Debug)]
@@ -81,6 +81,7 @@ impl Templates {
         match template.entity_type {
             EntityType::Item => commands.add_component(entity, Item{}),
             EntityType::Score => commands.add_component(entity, ScoreItem{}),
+            EntityType::FovBoost => commands.add_component(entity, FovItem{}),
             EntityType::Enemy => {
                 commands.add_component(entity, Enemy{});
                 commands.add_component(entity, FieldOfView::new(6));
@@ -106,9 +107,10 @@ impl Templates {
                 match provides.as_str() {
                     "Healing" => commands.add_component(entity, ProvidesHealing{amount: *n}),
                     "MagicMap" => commands.add_component(entity, ProvidesDungeonMap{}),
-                    "NVision" => commands.add_component(entity, ProvidesNVision{}),
+                    "NVision" => commands.add_component(entity, ProvidesNVision{amount: *n}),
                     "Armor" => commands.add_component(entity, ProvidesArmor{amount: *n}),
                     "Score" => commands.add_component(entity, ProvidesScore{amount: *n}),
+                    "Utility" => commands.add_component(entity, Utility{}),
                     "PoisonResistance" => commands.add_component(entity, ProvidesPoisonR{amount: *n}),
                     _ => println!("Warning: we don't know how to provide {}", provides),
                 }

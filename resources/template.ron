@@ -8,14 +8,20 @@ Templates(
         ),
         Template(
             entity_type: Item,
+            name: "Old Key", glyph: '\'', levels: [0, 1, 2, 3],
+            provides: Some([("Utility", 0)]),
+            frequency: 1
+        ),
+        Template(
+            entity_type: Item,
             name: "Dungeon Map", glyph: '{', levels : [0, 1, 2],
             provides: Some([("MagicMap", 0)]),
             frequency: 1
         ),
         Template(
-            entity_type: Item,
-            name: "NV Goggles", glyph: 'B', levels : [0, 1, 2],
-            provides: Some([("NVision", 0)]),
+            entity_type: FovBoost,
+            name: "Fountain of Foresight", glyph: '`', levels : [0, 1, 2],
+            provides: Some([("NVision", 1)]),
             frequency: 1
         ),
         Template(
@@ -32,7 +38,7 @@ Templates(
         ),
         Template (
             entity_type: Item,
-            name: "Anti-poison", glyph: 'p', levels: [0, 1, 2, 3],
+            name: "Anti-poison", glyph: ',', levels: [0, 1, 2, 3],
             provides: Some([("PoisonResistance", 1)]),
             frequency: 1
         ),

@@ -97,7 +97,7 @@ pub fn hud(ecs: &SubWorld) {
             .find_map(|(entity, _player)| Some(*entity))
             .unwrap();
         let mut item_query = <(&Item, &Name, &Carried)>::query();
-        let mut y = 9;
+        let mut y = 8;
         item_query
             .iter(ecs)
             .filter(|(_, _, carried)| carried.0 == player)

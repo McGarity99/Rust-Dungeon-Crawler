@@ -8,20 +8,23 @@ pub enum TileType {
     PoisonFloor,
     Decorative,
     OtherDecorative,
+    Door,
     Exit
 }
 
 
 pub struct Map {        //map indexed Y-first
     pub tiles: Vec<TileType>,
-    pub revealed_tiles: Vec<bool>
+    pub revealed_tiles: Vec<bool>,
+    pub key_carried: bool
 }
 
 impl Map {
     pub fn new() -> Self {
         Self { 
             tiles: vec![TileType::Floor; NUM_TILES],
-            revealed_tiles: vec![false; NUM_TILES] 
+            revealed_tiles: vec![false; NUM_TILES],
+            key_carried: false 
         }
     }
 
@@ -34,7 +37,8 @@ impl Map {
         self.in_bounds(point)
             && (self.tiles[map_idx(point.x, point.y)] == TileType::Floor ||
             self.tiles[map_idx(point.x, point.y)] == TileType::PoisonFloor ||
-            self.tiles[map_idx(point.x, point.y)] == TileType::Exit)
+            self.tiles[map_idx(point.x, point.y)] == TileType::Exit ||
+            (self.tiles[map_idx(point.x, point.y)] == TileType::Door && self.key_carried))
     }
 
     pub fn try_idx(&self, point: Point) -> Option<usize> {

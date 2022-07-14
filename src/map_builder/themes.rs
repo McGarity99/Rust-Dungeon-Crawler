@@ -16,6 +16,7 @@ impl MapTheme for DungeonTheme {
             TileType::PoisonFloor => to_cp437('-'),
             TileType::Decorative => to_cp437('M'),
             TileType::OtherDecorative => to_cp437('3'),
+            TileType::Door => to_cp437('4'),
             TileType::Exit => to_cp437('>')
         }
     }
@@ -31,6 +32,7 @@ impl MapTheme for ForestTheme {
             TileType::PoisonFloor => to_cp437('y'),
             TileType::Decorative => to_cp437('$'),
             TileType::OtherDecorative => to_cp437('%'),
+            TileType::Door => to_cp437('2'),
             TileType::Exit => to_cp437('>')
         }
     }
@@ -52,6 +54,7 @@ impl MapTheme for VolcanoTheme {
             TileType::PoisonFloor => to_cp437('J'),
             TileType::Decorative => to_cp437('H'),
             TileType::OtherDecorative => to_cp437('X'),
+            TileType::Door => to_cp437('Y'),
             TileType::Exit => to_cp437('>')
         }
     }
@@ -74,6 +77,7 @@ impl MapTheme for TempleTheme {
             TileType::PoisonFloor => to_cp437('*'),
             TileType::Decorative => to_cp437('='),
             TileType::OtherDecorative => to_cp437('+'),
+            TileType::Door => to_cp437('8'),
             TileType::Exit => to_cp437('>')
         }
     }

@@ -64,6 +64,9 @@ pub struct Item;
 pub struct ScoreItem;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
+pub struct FovItem;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct AmuletOfYala;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -102,6 +105,12 @@ impl FieldOfView {
         self.radius = NV_FOV;
         self.is_dirty = true;
     }
+
+    pub fn inc_fov(&mut self) {
+        self.visible_tiles = HashSet::new();
+        self.radius += 1;
+        self.is_dirty = true;
+    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -113,7 +122,9 @@ pub struct ProvidesHealing {
 pub struct ProvidesDungeonMap;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-pub struct ProvidesNVision;
+pub struct ProvidesNVision {
+    pub amount: i32
+}
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct ProvidesArmor {
@@ -132,6 +143,9 @@ pub struct ProvidesPoisonR {
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct Carried(pub Entity);
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Utility;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct ActivateItem {

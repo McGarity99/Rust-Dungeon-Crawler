@@ -36,16 +36,6 @@ pub fn player_input(
                 let mut score_amt = 0i32;   //temp variable to store the amount added to the player's score from ScoreItem
                 let mut fov_amt = 0i32; //temp variable to store the amount added to the player's fov distance from FovItem
 
-                //let mut score_to_apply = Vec::<(Entity, i32)>::new();
-                /* let mut key_query = <(&Carried, &Utility)>::query();
-                match key_query.iter(ecs).nth(0) {
-                    Some(_) => {
-                        map.key_carried = true;
-                        println!("carrying a key");
-                    },
-                    None => {println!("{:?}", key_query.iter(ecs).nth(0));}
-                } */
-
                 let (_player, player_pos) = players
                     .iter(ecs)
                     .find_map(|(entity, pos)| Some((*entity, *pos)))
@@ -57,8 +47,8 @@ pub fn player_input(
                 let mut fountain_locs = <(Entity, &FovItem, &Point, &ProvidesNVision)>::query();    //get all entities that have a FovItem & Point component
                 fountain_locs
                     .iter(ecs)
-                    .filter(|(_entity, f_i, &pos, &p_n)| pos == player_pos)
-                    .for_each(|(entity, f_item, position, provides_nv)| {
+                    .filter(|(_entity, _f_i, &pos, &p_n)| pos == player_pos)
+                    .for_each(|(entity, _f_item, position, provides_nv)| {
                         println!("fountain at pos: {:?}", position);
                         picked_up_fountain = true;
                         fov_amt += provides_nv.amount;
@@ -136,24 +126,7 @@ pub fn player_input(
                                     }
                                 }
                             });
-                        //Point::new(0, 0)
-                        let mut key_query = <(&Item, &Carried, &Utility)>::query();
-                        match key_query.iter(ecs).filter(|(_, carried, _,) | carried.0 == player).nth(0) {
-                            Some(_) => {
-                                map.key_carried = true;
-                                println!("carrying a key");
-                            },
-                            None => {println!("{:?}", key_query.iter(ecs).nth(0));}
-                        }
                     }
-                    /* let mut key_query = <(&Item, &Carried, &Utility)>::query();
-                    match key_query.iter(ecs).nth(0) {
-                        Some(_) => {
-                            map.key_carried = true;
-                            println!("carrying a key");
-                        },
-                        None => {println!("{:?}", key_query.iter(ecs).nth(0));}
-                    } */
                 }
                 Point::new(0, 0)
             }

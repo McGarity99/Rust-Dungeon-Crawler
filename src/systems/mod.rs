@@ -10,12 +10,14 @@ mod combat;
 mod chasing;
 mod fov;
 mod use_item;
+mod key_handle;
 
 use crate::prelude::*;
 
 pub fn build_input_scheduler() -> Schedule {
     Schedule::builder()
         .add_system(player_input::player_input_system())
+        .add_system(key_handle::key_handle_system())
         .add_system(fov::fov_system())
         .flush()
         .add_system(map_render::map_render_system())

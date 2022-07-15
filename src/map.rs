@@ -16,7 +16,8 @@ pub enum TileType {
 pub struct Map {        //map indexed Y-first
     pub tiles: Vec<TileType>,
     pub revealed_tiles: Vec<bool>,
-    pub key_carried: bool
+    pub key_carried: bool,
+    pub spawned_points: Vec<usize>
 }
 
 impl Map {
@@ -24,7 +25,8 @@ impl Map {
         Self { 
             tiles: vec![TileType::Floor; NUM_TILES],
             revealed_tiles: vec![false; NUM_TILES],
-            key_carried: false 
+            key_carried: false,
+            spawned_points: Vec::new() 
         }
     }
 
@@ -104,7 +106,9 @@ impl BaseMap for Map {
     }
 
     fn is_opaque(&self, idx: usize) -> bool {
-        self.tiles[idx as usize] != TileType::Floor
+        self.tiles[idx as usize] != TileType::Floor &&  //FOV extends through Floor tiles
+        self.tiles[idx as usize] != TileType::PoisonFloor   //FOV extends through PoisonFloor tiles
+        //self.tiles[idx as usize] != TileType::Door
     }
 }
 

@@ -58,7 +58,7 @@ impl Templates {
             if let Some(entity) = rng.random_slice_entry(&available_entities) {
                 let idx = map.point2d_to_index(*pt);
                 if map.spawned_points.contains(&idx) == false {
-                    println!("doesn't contain {}, pushing", idx);
+                    //println!("doesn't contain {}, pushing", idx);
                     map.spawned_points.push(idx);
                     self.spawn_entity(pt, entity, &mut commands, ecs);
                 }
@@ -80,7 +80,7 @@ impl Templates {
             .iter(ecs)
             .filter(|(_e, pos)| *pos == pt)
             .for_each(|_e| {count += 1;});
-        println!("count in spawning: {}", count);
+        //println!("count in spawning: {}", count);
 
         if count == 0 {
 

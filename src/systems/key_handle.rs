@@ -20,7 +20,12 @@ pub fn key_handle(
             map.key_carried = true;
         },
         None => {
-            map.key_carried = false;
+            let mut player_point_q = <&Point>::query().filter(component::<Player>());
+            let player_point = player_point_q.iter(ecs).nth(0).unwrap();
+            let position = map.point2d_to_index(*player_point); //represents player's position as a usize
+            if !map.prefab_indices.contains(&position) {    //if player is not currently inside a prefab structure,
+                map.key_carried = false;                    //then mark player as having no key, preventing them from locking themselves inside a prefab
+            }
         }
     }   //if player has a key, set map attribute to allow them to pass through doors
 }

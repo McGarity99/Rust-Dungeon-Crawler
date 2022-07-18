@@ -17,24 +17,6 @@ pub fn use_item(
     commands: &mut CommandBuffer,
     #[resource] map: &mut Map
 ) {
-    /* let mut fov_query = <&mut FieldOfView>::query().filter(component::<Player>());
-    let player_fov = fov_query.iter_mut(ecs).nth(0).unwrap();
-    <(Entity, &ActivateItem)>::query().iter(ecs)
-    .for_each(|(entity, activate)| {
-        let item = ecs.entry_ref(activate.item);
-        if let Ok(item) = item {
-            if let Ok(nv) = item.get_component::<ProvidesNVision>() {
-                //let new_fov = player_fov.clone_dirty();
-                println!("got Night Vision");
-            } else {
-                println!("not Night Vision");
-            }
-        }
-    }); */
-    /* let mut player_query = <&mut Player>::query().iter(ecs).nth(0).unwrap();
-    let player_fov = fov_query.iter_mut(ecs).nth(0).unwrap();
-    player_fov.set_fov(); */
-
     let mut healing_to_apply = Vec::<(Entity, i32)>::new();
     let mut armor_to_apply = Vec::<(Entity, i32)>::new();
     let mut poison_res_to_apply = Vec::<(Entity, i32)>::new();
@@ -50,7 +32,7 @@ pub fn use_item(
                 map.revealed_tiles.iter_mut().for_each(|t| *t = true);  //if ProvidesDungeonMap component is present, reveal all map tiles
             }
             if let Ok(armor) = item.get_component::<ProvidesArmor>() {
-                println!("armor to apply pushing: {}", armor.amount);
+                //println!("armor to apply pushing: {}", armor.amount);
                 armor_to_apply.push((activate.used_by, armor.amount));
             }
             if let Ok(poison_res) = item.get_component::<ProvidesPoisonR>() {

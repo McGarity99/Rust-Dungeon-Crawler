@@ -29,7 +29,8 @@ pub struct MapBuilder {
     pub monster_spawns: Vec<Point>,
     pub player_start: Point,    //location of player's start
     pub amulet_start: Point,
-    pub theme: Box<dyn MapTheme>
+    pub theme: Box<dyn MapTheme>,
+    //pub prefab_indices: Vec<usize>
 }
 
 impl MapBuilder {

@@ -17,7 +17,8 @@ pub struct Map {        //map indexed Y-first
     pub tiles: Vec<TileType>,
     pub revealed_tiles: Vec<bool>,
     pub key_carried: bool,
-    pub spawned_points: Vec<usize>
+    pub spawned_points: Vec<usize>, //vec of points where entities are spawned
+    pub prefab_indices: Vec<usize>  //vec of points that are within a prefab structure
 }
 
 impl Map {
@@ -26,7 +27,8 @@ impl Map {
             tiles: vec![TileType::Floor; NUM_TILES],
             revealed_tiles: vec![false; NUM_TILES],
             key_carried: false,
-            spawned_points: Vec::new() 
+            spawned_points: Vec::new(),
+            prefab_indices: Vec::new() 
         }
     }
 

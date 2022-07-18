@@ -5,11 +5,11 @@ const FORTRESS: (&str, i32, i32) = ("
 ---######---
 ---d----#---
 ---#-M--#---
--###----###-
--DM---y--MD-
--###----###-
+-###--y-###-
+-D--M-y---D-
+-###--yy###-
 ---#----#---
----#----#---
+---#--M-#---
 ---###d##---
 ------------
 ", 12, 11);
@@ -18,12 +18,12 @@ const LABYRINTH: (&str, i32, i32) = ("
 -------------
 -###########-
 -#-#--y--#M#-
--#---d-#---#-
--D-#-#M#---#-
--#-#-#-##d##-
+-#---d-#-y-#-
+-D-#-#M#-y-#-
+-#-#y#-##d##-
 -#-#-#-#---#-
 -#d###---#-#-
--#M----#-#-#-
+-#M-y--#-#-#-
 -#########D#-
 -------------
 ", 13, 11);
@@ -31,13 +31,13 @@ const LABYRINTH: (&str, i32, i32) = ("
 const MAZE: (&str, i32, i32) = ("
 -----------------
 -#######D#######-
--##-------y--###-
+-##y------y--###-
 -###-d#-##-#-###-
 -###-#####-#####-
--##-----M--##d##-
--##-########--##-
+-##-y---M--##d##-
+-##-########y-##-
 -##-##---#-----#-
--#M----#---###M#-
+-#M-y--#---###M#-
 -###dd##D#######-
 -----------------
 ", 17, 11);
@@ -47,11 +47,11 @@ const TOMB: (&str, i32, i32) = ("
 -d#D#D#D##-
 -#--#-#-M#-
 -#-#---#-#-
--#---y---d-
+-#y-yyy-yd-
 -#---M---#-
 -#---M---#-
 -##d#-####-
--#-#---#-#-
+-#y#-y-#y#-
 -#M-#-#--#-
 -##D#D#D##-
 -----------
@@ -103,12 +103,16 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
         }
 
         if let Some(placement) = placement {
+            let mut row_num = 0i32;
+            let mut col_num = 0i32;
             let string_vec: Vec<char> = structure.0
                 .chars().filter(|a| *a != '\r' && *a != '\n')   //use an iterator to remove \r and \n charecters in the string literal
                 .collect();
             let mut i = 0;  //represents the current location in the prefab as we iterate through it
             for ty in placement.y .. placement.y + structure.2 { //iterate every tile the prefab will cover
+                //println!("current ty {}", ty);
                 for tx in placement.x .. placement.x + structure.1 {
+                    //println!("currrent tx {}", tx);
                     let idx = map_idx(tx, ty);
                     let c = string_vec[i];  //retrieve the character at position i from the string
                     match c {
@@ -128,8 +132,17 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
                         'D' => mb.map.tiles[idx] = TileType::Door,
                         _ => println!("No idea what to do with {}", c)
                     }
+                    //println!("row_n: {}, col_n: {}", row_num, col_num);
+                    if (row_num > 0 && row_num < structure.2) && (col_num > 0 && col_num < structure.1) {
+                        //println!("prefab_indices pushing {}", idx);
+                        mb.map.prefab_indices.push(idx);    //log given space as being "in-prefab", but only if it is not in first/last row or column
+                    }
+                    //mb.map.prefab_indices.push(idx);    //log given space as being "in-prefab"
                     i += 1;
+                    col_num += 1;   //increment the column number
                 }
+                col_num = 0;
+                row_num += 1;   //increment the row number
             }
         }
     }

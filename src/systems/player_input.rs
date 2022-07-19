@@ -196,6 +196,7 @@ pub fn player_input(
                         destination,
                     },
                 ));
+                
             }
 
             //*turn_state = TurnState::PlayerTurn;

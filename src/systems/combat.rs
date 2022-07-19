@@ -6,11 +6,13 @@ use crate::prelude::*;
 #[read_component(ProvidesScore)]
 #[read_component(IgnoresArmor)]
 #[read_component(StealsScore)]
+#[read_component(ReducesFOV)]
 #[write_component(Score)]
 #[write_component(Health)]
 #[write_component(Armor)]
 #[read_component(Damage)]
 #[read_component(Carried)]
+#[write_component(FieldOfView)]
 pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
     let mut attackers = <(Entity, &WantsToAttack)>::query();
     let mut take_health = false;
@@ -47,7 +49,8 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
             .sum();
         let final_damage = base_damage + weapon_damage;
         let is_visage: bool = ecs.entry_mut(*attacker).unwrap().get_component::<StealsScore>().is_ok();
-        let is_angel: bool = ecs.entry_mut(*attacker).unwrap().get_component::<IgnoresArmor>().is_ok(); 
+        let is_angel: bool = ecs.entry_mut(*attacker).unwrap().get_component::<IgnoresArmor>().is_ok();
+        let is_wraith: bool = ecs.entry_mut(*attacker).unwrap().get_component::<ReducesFOV>().is_ok(); 
         if let Ok(mut armor) = ecs.entry_mut(*victim).unwrap().get_component_mut::<Armor>() {
             if is_angel {   //if being attacked by Fallen Angel (ignores armor)
                 take_health = true;
@@ -84,10 +87,17 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                 //if player is attacked (and no armor or broken armor)
                 health.current -= health_damage;
                 if is_visage {
-                    if let Ok(mut score_steal) = ecs.clone().entry_mut(*attacker).unwrap().get_component::<StealsScore>() {
+                    if let Ok(score_steal) = ecs.clone().entry_mut(*attacker).unwrap().get_component::<StealsScore>() {
                         if let Ok(mut p_score) = ecs.clone().entry_mut(*victim).unwrap().get_component_mut::<Score>() {
                             p_score.current = i32::max(0, p_score.current - score_steal.amount);
-                        }
+                        }   //get player's score and reduce it when fighting a Visage (with no armor)
+                    }
+                }
+                if is_wraith {
+                    if let Ok(fov) = ecs.clone().entry_mut(*victim).unwrap().get_component_mut::<FieldOfView>() {
+                        if fov.radius > 5 {
+                            fov.dec_fov();
+                        }   //do not allow player's FOV to slide below 4 tiles when fighting a Wraith (with no armor)
                     }
                 }
             } else if !is_player {
@@ -95,12 +105,12 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                 health.current -= final_damage;
             }
             if health.current < 1 && !is_player {
-                if let Ok(ProvidesScore) = ecs
+                if let Ok(_provides_score) = ecs
                     .entry_mut(*victim)
                     .unwrap()
                     .get_component::<ProvidesScore>()
                 {
-                    let score_yield = if let Ok(score) = ecs
+                    let _score_yield = if let Ok(score) = ecs
                         .entry_ref(*victim)
                         .unwrap()
                         .get_component::<ProvidesScore>() {

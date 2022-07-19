@@ -14,6 +14,20 @@ const FORTRESS: (&str, i32, i32) = ("
 ------------
 ", 12, 11);
 
+const FORTRESS_1: (&str, i32, i32) = ("
+------------
+---###d##---
+---#----#---
+---#-M--#---
+-#d#y--y###-
+-D---##---D-
+-###y--y#d#-
+---#----#---
+---d-M--d---
+---######---
+------------
+", 12, 11);
+
 const LABYRINTH: (&str, i32, i32) = ("
 -------------
 -###########-
@@ -28,6 +42,20 @@ const LABYRINTH: (&str, i32, i32) = ("
 -------------
 ", 13, 11);
 
+const LABYRINTH_1: (&str, i32, i32) = ("
+-------------
+-#####d#####-
+-#-#-----#M#-
+-#-M-#y#---#-
+-D-#-#y#---#-
+-#-#-#y###d#-
+-#-#-#y#---#-
+-##d##---#-#-
+-#---M-#-#-#-
+-d########D#-
+-------------
+", 13, 11);
+
 const MAZE: (&str, i32, i32) = ("
 -----------------
 -#######D#######-
@@ -39,6 +67,20 @@ const MAZE: (&str, i32, i32) = ("
 -##-##---#-----#-
 -#M-y--#---###M#-
 -###dd##D#######-
+-----------------
+", 17, 11);
+
+const MAZE_1: (&str, i32, i32) = ("
+-----------------
+-##d###d####D###-
+-##-M-----y--###-
+-###-d#-##-#-###-
+-d##y#####-#####-
+-##-yy--M--##d##-
+-d#-########yy##-
+-##-##---#--M--#-
+-#M-y--#---d##M#-
+-###d#####D#####-
 -----------------
 ", 17, 11);
 
@@ -57,6 +99,36 @@ const TOMB: (&str, i32, i32) = ("
 -----------
 ", 11, 12);
 
+const TOMB_1: (&str, i32, i32) = ("
+-----------
+-##D#D#D##-
+-#--#y#-M#-
+-#y#---#y#-
+-#---d---#-
+-#--ddd--#-
+-#M-----M#-
+-####-####-
+-#-#---#-#-
+-#M-#-#--#-
+-##D#D#D##-
+-----------
+", 11, 12);
+
+const PRISON: (&str, i32, i32) = ("
+------------
+-####DD####-
+-#d-#--#-##-
+-#M-D--D-M#-
+-##-#--#-##-
+-####yy#d##-
+-###d--####-
+-####yy#d##-
+-#M-D--D-M#-
+-##d#--####-
+-####DD####-
+------------
+", 12, 12);
+
 pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
     let mut structure = ("", 0, 0);
     let mut placement = None;
@@ -71,13 +143,18 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
     );
 
     //let mut attempts = 0;
-    for i in 0 ..= 3 {
+    for _i in 0 ..= 3 {
         while placement.is_none() && attempts < 10 {    //while placement is empty, and attempts are less than 10, loop
-            structure = match rng.range(0, 4) {
+            structure = match rng.range(0, 9) { //randomly select a prefab structure to place
                 0 => FORTRESS,
                 1 => LABYRINTH,
                 2 => MAZE,
-                _ => TOMB
+                3 => TOMB,
+                4 => FORTRESS_1,
+                5 => LABYRINTH_1,
+                6 => MAZE_1,
+                7 => TOMB_1,
+                _ => PRISON
             };
             let dimensions = Rect::with_size(   //create a Rect type starting at a random map location, with the height and width of the vault
                 rng.range(0, SCREEN_WIDTH - structure.1),

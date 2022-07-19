@@ -44,7 +44,7 @@ Templates(
         ),
         Template(
             entity_type: Score,
-            name: "Treasure", glyph: '&', levels : [0, 1, 2],
+            name: "Treasure Medallion", glyph: '&', levels : [0, 1, 2],
             provides: Some([("Score", 100)]),
             frequency: 1
         ),
@@ -103,6 +103,14 @@ Templates(
             frequency: 1,
             base_damage: Some(2),
             provides: Some([("Score", 100)])
+        ),
+        Template(
+            entity_type: Enemy,
+            name: "Wraith", glyph: ':', levels: [3],
+            hp: Some(8),
+            frequency: 1,
+            base_damage: Some(2),
+            provides: Some([("Score", 200)])
         ),
         Template(
             entity_type: Item,

@@ -15,8 +15,8 @@ mod prelude {
     pub const SCREEN_HEIGHT: i32 = 50;
     pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH / 2;
     pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT / 2;
-    pub const REG_FOV: i32 = 8;
-    pub const NV_FOV: i32 = 12;
+    pub const REG_FOV: i32 = 8; //represents the player's FOV starting radius
+    pub const FOV_REDUC: i32 = 1;   //represents amount by which player's FOV radius is reduced by special enemies
     pub const SCORE_STEAL_AMT: i32 = 50;
     pub const MAX_LEVEL: u32 = 3;
     pub const START_LEVEL: u32 = 0; //for debugging purposes (controls the theme the player starts in [0 Forest, 1 Dungeon, 2 Temple, 3 Volcano])

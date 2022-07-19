@@ -85,12 +85,12 @@ impl FieldOfView {
         }
     }
 
-    pub fn new_nv() -> Self {
+    /* pub fn new_nv() -> Self {
         Self { visible_tiles: HashSet::new(),
-             radius: NV_FOV,
+            radius: NV_FOV,
               is_dirty: true
         }
-    }
+    } */
 
     pub fn clone_dirty(&self) -> Self {
         Self {
@@ -100,16 +100,23 @@ impl FieldOfView {
         }
     }
 
-    pub fn set_fov(&mut self) {
+    /* pub fn set_fov(&mut self) {
         self.visible_tiles = HashSet::new();
         self.radius = NV_FOV;
         self.is_dirty = true;
-    }
+    } */
 
     pub fn inc_fov(&mut self) {
         self.visible_tiles = HashSet::new();
         self.radius += 1;
         self.is_dirty = true;
+    }
+
+    pub fn dec_fov(&mut self) {
+        self.visible_tiles = HashSet::new();
+        self.radius -= FOV_REDUC;
+        self.is_dirty = true;
+        println!("new fov: {}", self.radius);
     }
 }
 
@@ -164,6 +171,9 @@ pub struct IgnoresArmor;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct AllSeeing;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ReducesFOV;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct StealsScore {

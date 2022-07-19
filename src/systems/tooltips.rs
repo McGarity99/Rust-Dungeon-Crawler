@@ -28,12 +28,7 @@ pub fn tooltips(ecs: &SubWorld,
         .iter(ecs)
         .filter(|(_, pos, _)| **pos == map_pos) //only include elements whose Point position is equal to the current mouse cursor position stored in map_pos
         .for_each(|(entity, _, name)| {
-            let screen_pos = *mouse_pos * 4;    //mouse position is in coordinates aligning with the monster layer; tooltips layer is 4 times larger
-            /* if ecs.entry_ref(*entity).unwrap().get_component::<Damage>().is_ok() {
-                println!("damage found");
-            } else {
-                println!("no damage found");
-            } TODO: remove this debugging section before submission */
+            let screen_pos = (*mouse_pos * 4) - 2;    //mouse position is in coordinates aligning with the monster layer; tooltips layer is 4 times larger
             let dmg = if let Ok(damage) = ecs.entry_ref(*entity)
                 .unwrap()
                 .get_component::<Damage>()

@@ -80,7 +80,6 @@ impl Templates {
             .iter(ecs)
             .filter(|(_e, pos)| *pos == pt)
             .for_each(|_e| {count += 1;});
-        //println!("count in spawning: {}", count);
 
         if count == 0 {
 
@@ -110,6 +109,9 @@ impl Templates {
                     if template.name.eq("Fallen Angel") {
                         commands.add_component(entity, IgnoresArmor{});
                     }   //allow Fallen Angel enemy type to ignore player's armor
+                    if template.name.eq("Wraith") {
+                        commands.add_component(entity, ReducesFOV{});
+                    }   //allow Wraith enemy type to reduce the player's FOV
                     commands.add_component(entity, Health {
                         current: template.hp.unwrap(),
                         max: template.hp.unwrap()

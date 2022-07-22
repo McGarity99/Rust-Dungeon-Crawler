@@ -70,7 +70,6 @@ pub struct TempleTheme{}
 
 impl MapTheme for TempleTheme {
     fn tile_to_render(&self, tile_type: TileType) -> FontCharType {
-        let mut rng = RandomNumberGenerator::new();
         match tile_type {
             TileType::Floor => to_cp437(')'),
             TileType::Wall => to_cp437('('),

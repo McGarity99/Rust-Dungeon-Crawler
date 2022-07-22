@@ -11,6 +11,11 @@ mod prelude {
     pub use legion::*;
     pub use legion::world::SubWorld;
     pub use legion::systems::CommandBuffer;
+    pub use std::fs::File;
+    pub use std::io::BufReader;
+    pub use std::thread;
+    pub use rodio::{Decoder, OutputStream, Sink};
+    pub use rodio::source::{SineWave, Source};
     pub const SCREEN_WIDTH: i32 = 80;
     pub const SCREEN_HEIGHT: i32 = 50;
     pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH / 2;
@@ -23,6 +28,7 @@ mod prelude {
     pub const POISON_DMG: i32 = 1;  //const representing damage dealt by poison floors
     pub const START_P_RESISTANCE: i32 = 2;  //amount of poison resistance the player starts the game with
     pub const MAX_P_RESISTANCE: i32 = 5;    //max poison resistance the player can have
+    pub const HEALTH_WARN_THRESHOLD: i32 = 5;   //threshold below which the player will get an audio warning of low health
     pub use crate::map::*;
     pub use crate::map_builder::*;
     pub use crate::camera::*;
@@ -39,7 +45,8 @@ struct State {
     resources: Resources,
     input_systems: Schedule,
     player_systems: Schedule,
-    monster_systems: Schedule
+    monster_systems: Schedule,
+    //overthemes: Vec<Sink>
 }
 
 impl State {
@@ -60,21 +67,36 @@ impl State {
             &map_builder.monster_spawns,
             &mut map_builder.map
         );
-        /* map_builder.rooms
-            .iter()
-            .skip(1)
-            .map(|r| r.center())
-            .for_each(|pos| spawn_entity(&mut ecs, &mut rng, pos)); */
         resources.insert(map_builder.map);
         resources.insert(Camera::new(map_builder.player_start));
         resources.insert(TurnState::AwaitingInput);
         resources.insert(map_builder.theme);
+
+        
+            /* let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+            let file = File::open("../resources/Ambience_Forest.wav").unwrap();
+            let the_sink = stream_handle.play_once(BufReader::new(file)).unwrap();
+            the_sink.set_volume(0.5);
+            println!("started the_sink");
+            //thread::sleep(std::time::Duration::from_millis(100));
+            let mut sound_vec: Vec<Sink> = Vec::new();
+            sound_vec.push(the_sink);
+            /* match the_sink {
+                Ok(s) => {
+                    sound_vec.push(s);  //maintin the handle on the Sink playing the sound
+                },
+                _ => {}
+            } */
+            println!("sound_vec: {:?}", sound_vec.len()); */
+        
+        
         Self { 
             ecs,
             resources,
             input_systems: build_input_scheduler(),
             player_systems: build_player_scheduler(),
-            monster_systems: build_monster_scheduler()
+            monster_systems: build_monster_scheduler(),
+            //overthemes: sound_vec
         }
     }
 
@@ -129,6 +151,15 @@ impl State {
             self.resources.insert(Camera::new(map_builder.player_start));
             self.resources.insert(TurnState::AwaitingInput);
             self.resources.insert(map_builder.theme);
+
+            /* thread::spawn(|| {
+                let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+                let sink = Sink::try_new(&stream_handle).unwrap();
+                let file = BufReader::new(File::open("../resources/Ambience_Forest.wav").unwrap());
+                let source = Decoder::new(file).unwrap();
+                sink.append(source);
+                //sink.sleep_until_end();
+            }); */
     }
 
     fn advance_level(&mut self) {
@@ -142,6 +173,48 @@ impl State {
         if let Ok(p_score) = self.ecs.entry_mut(player_entity).unwrap().get_component_mut::<Score>() {
             p_score.level_theme += 1;
             level_id = p_score.level_theme;
+            match level_id {
+                0 => {
+                    /* thread::spawn(|| {
+                        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+                        let sink = Sink::try_new(&stream_handle).unwrap();
+                        let file = BufReader::new(File::open("../resources/Ambience_Forest.wav").unwrap());
+                        let source = Decoder::new(file).unwrap();
+                        sink.append(source);
+                        sink.sleep_until_end();
+                    }); */
+                },
+                1 => {
+                    /* thread::spawn(|| {
+                        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+                        let sink = Sink::try_new(&stream_handle).unwrap();
+                        let file = BufReader::new(File::open("../resources/Ambience_Dungeon.wav").unwrap());
+                        let source = Decoder::new(file).unwrap();
+                        sink.append(source);
+                        sink.sleep_until_end();
+                    }); */
+                },
+                2 => {
+                    /* thread::spawn(|| {
+                        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+                        let sink = Sink::try_new(&stream_handle).unwrap();
+                        let file = BufReader::new(File::open("../resources/Ambience_Temple.mp3").unwrap());
+                        let source = Decoder::new(file).unwrap();
+                        sink.append(source);
+                        sink.sleep_until_end();
+                    }); */
+                },
+                _ => {
+                    /* thread::spawn(|| {
+                        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+                        let sink = Sink::try_new(&stream_handle).unwrap();
+                        let file = BufReader::new(File::open("../resources/Ambience_Hell_00.mp3").unwrap());
+                        let source = Decoder::new(file).unwrap();
+                        sink.append(source);
+                        sink.sleep_until_end();
+                    }); */
+                }
+            }
         }   //advance level id token to spawn correct level theme
             use std::collections::HashSet;
             let mut entities_to_keep = HashSet::new();

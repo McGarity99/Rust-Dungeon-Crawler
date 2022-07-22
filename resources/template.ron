@@ -14,7 +14,7 @@ Templates(
         ),
         Template(
             entity_type: Item,
-            name: "Dungeon Map", glyph: '{', levels : [0, 1, 2],
+            name: "Dungeon Map", glyph: '{', levels : [0],
             provides: Some([("MagicMap", 0)]),
             frequency: 1
         ),

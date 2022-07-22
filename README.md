@@ -35,4 +35,5 @@ legion = 0.3.1
 serde = 1.0.115
 <br />
 ron = 0.6.1
+rodio = 0.15.0
 

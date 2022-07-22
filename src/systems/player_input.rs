@@ -70,12 +70,20 @@ pub fn player_input(
 
                 if picked_up_fountain {
                     println!("picked up fountain == true");
-                    if let Ok(mut fov) = ecs.clone().entry_mut(*player_entity)
+                    if let Ok(fov) = ecs.clone().entry_mut(*player_entity)
                         .unwrap()
                         .get_component_mut::<FieldOfView>()
                     {
                         fov.inc_fov();
                         println!("fov radius: {}", fov.radius);
+                        thread::spawn(|| {
+                            let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                            let sink = Sink::try_new(&stream_handle).unwrap();
+                            let file = BufReader::new(File::open("../resources/bubble.wav").unwrap());
+                            let source = Decoder::new(file).unwrap();
+                            sink.append(source);
+                            sink.sleep_until_end();
+                        });
                     } else {
                         println!("{:?}", ecs.clone().entry_mut(*player_entity).unwrap().get_component_mut::<FieldOfView>());
                     }
@@ -86,6 +94,14 @@ pub fn player_input(
                         .unwrap()
                         .get_component_mut::<Score>()
                     {
+                        thread::spawn(|| {
+                            let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                            let sink = Sink::try_new(&stream_handle).unwrap();
+                            let file = BufReader::new(File::open("../resources/coin.wav").unwrap());
+                            let source = Decoder::new(file).unwrap();
+                            sink.append(source);
+                            sink.sleep_until_end();
+                        });
                         score.current += score_amt;
                     }
                 } else {
@@ -122,10 +138,28 @@ pub fn player_input(
                                             .filter(|(_, c, _)| c.0 == player)
                                             .for_each(|(e, _c, _w)| {
                                                 commands.remove(*e);
-                                            })
+                                            });
+                                        thread::spawn(|| {
+                                            let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                                            let sink = Sink::try_new(&stream_handle).unwrap();
+                                            let file = BufReader::new(File::open("../resources/sword-unsheathe.wav").unwrap());
+                                            let source = Decoder::new(file).unwrap();
+                                            sink.append(source);
+                                            sink.sleep_until_end();
+                                        }); //play weapon pickup sound
+                                    } else {
+                                        thread::spawn(|| {
+                                            let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                                            let sink = Sink::try_new(&stream_handle).unwrap();
+                                            let file = BufReader::new(File::open("../resources/interface1.wav").unwrap());
+                                            let source = Decoder::new(file).unwrap();
+                                            sink.append(source);
+                                            sink.sleep_until_end();
+                                        }); //play item pickup sound
                                     }
                                 }
-                            });
+                            }
+                        );
                     }
                 }
                 Point::new(0, 0)
@@ -156,13 +190,6 @@ pub fn player_input(
         let mut did_something = false;
 
         if delta.x != 0 || delta.y != 0 || !did_something {
-            /* let mut players = <(Entity, &Point)>::query()
-            .filter(component::<Player>()); //only entities with a Point component and a Player tag component should be included in the query */
-
-            /* match players.iter(ecs).nth(0) {
-                Some(_) => {},
-                None => return,
-            } */
 
             let (player_entity, destination) = players
                 .iter(ecs)

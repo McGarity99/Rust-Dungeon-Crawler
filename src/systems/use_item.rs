@@ -30,6 +30,14 @@ pub fn use_item(
             }
             if let Ok(_mapper) = item.get_component::<ProvidesDungeonMap>() {
                 map.revealed_tiles.iter_mut().for_each(|t| *t = true);  //if ProvidesDungeonMap component is present, reveal all map tiles
+                thread::spawn(|| {
+                    let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                    let sink = Sink::try_new(&stream_handle).unwrap();
+                    let file = BufReader::new(File::open("../resources/Map_Reveal.wav").unwrap());
+                    let source = Decoder::new(file).unwrap();
+                    sink.append(source);
+                    sink.sleep_until_end();
+                }); //play map reveal sound
             }
             if let Ok(armor) = item.get_component::<ProvidesArmor>() {
                 //println!("armor to apply pushing: {}", armor.amount);
@@ -46,6 +54,14 @@ pub fn use_item(
         if let Ok(mut target) = ecs.entry_mut(heal.0) {
             if let Ok(health) = target.get_component_mut::<Health>() {
                 health.current = i32::min(health.max, health.current + heal.1);
+                thread::spawn(|| {
+                    let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                    let sink = Sink::try_new(&stream_handle).unwrap();
+                    let file = BufReader::new(File::open("../resources/bottle.wav").unwrap());
+                    let source = Decoder::new(file).unwrap();
+                    sink.append(source);
+                    sink.sleep_until_end();
+                }); //play health potion drinking sound
             }
         }
     }   //apply healing to the target, taking min between max and current + amount, to avoid going over the maximum
@@ -54,6 +70,14 @@ pub fn use_item(
         if let Ok(mut target) = ecs.entry_mut(armor.0) {
             if let Ok(armor_amt) = target.get_component_mut::<Armor>() {
                 armor_amt.current = i32::min(armor_amt.max, armor_amt.current + armor.1);
+                thread::spawn(|| {
+                    let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                    let sink = Sink::try_new(&stream_handle).unwrap();
+                    let file = BufReader::new(File::open("../resources/chainmail1.wav").unwrap());
+                    let source = Decoder::new(file).unwrap();
+                    sink.append(source);
+                    sink.sleep_until_end();
+                }); //play armor application sound
             }
         }
     }   //apply armor to the target, taking min between max and current + amount, to avoid going over the maximum
@@ -62,6 +86,14 @@ pub fn use_item(
         if let Ok(mut target) = ecs.entry_mut(p_r.0) {
             if let Ok(score) = target.get_component_mut::<Score>() {
                 score.poison_shield = i32::min(score.max_poison_shield, score.poison_shield + p_r.1);
+                thread::spawn(|| {
+                    let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                    let sink = Sink::try_new(&stream_handle).unwrap();
+                    let file = BufReader::new(File::open("../resources/bubble2.wav").unwrap());
+                    let source = Decoder::new(file).unwrap();
+                    sink.append(source);
+                    sink.sleep_until_end();
+                }); //play poison resistance application sound
             }
         }
     }

@@ -86,6 +86,26 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
             if is_player && take_health {
                 //if player is attacked (and no armor or broken armor)
                 health.current -= health_damage;
+                thread::spawn(|| {
+                    let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                    let sink = Sink::try_new(&stream_handle).unwrap();
+                    let file = BufReader::new(File::open("../resources/Stab_Knife_01.wav").unwrap());
+                    let source = Decoder::new(file).unwrap();
+                    sink.append(source);
+                    sink.sleep_until_end();
+                });
+
+                if health.current <= HEALTH_WARN_THRESHOLD {
+                    thread::spawn(|| {
+                        let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                        let sink = Sink::try_new(&stream_handle).unwrap();
+                        let file = BufReader::new(File::open("../resources/Breath_Scared_17.wav").unwrap());
+                        let source = Decoder::new(file).unwrap();
+                        sink.append(source);
+                        sink.sleep_until_end();
+                    });
+                }
+
                 if is_visage {
                     if let Ok(score_steal) = ecs.clone().entry_mut(*attacker).unwrap().get_component::<StealsScore>() {
                         if let Ok(mut p_score) = ecs.clone().entry_mut(*victim).unwrap().get_component_mut::<Score>() {

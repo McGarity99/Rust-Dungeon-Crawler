@@ -133,6 +133,7 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
     let mut structure = ("", 0, 0);
     let mut placement = None;
     let mut attempts = 0;
+    println!("prefab.rs player_start: {:?}", mb.player_start);
 
     let d_map = DijkstraMap::new(
         SCREEN_WIDTH,
@@ -167,7 +168,7 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
             dimensions.for_each(|pt| {  //iterate every tile in the Rectangle via for_each
                 let idx = mb.map.point2d_to_index(pt);
                 let distance = d_map.map[idx];
-                if distance < 2000.0 && distance > 20.0 && mb.amulet_start != pt {  //if D map distance for the tile is < 2000.0, the tile is reachable
+                if distance < 2000.0 && distance > 20.0 && mb.amulet_start != pt && mb.player_start != pt {  //if D map distance for the tile is < 2000.0, the tile is reachable (ensure prefab does not contain amulet spawn or player_start)
                     can_place = true;
                 }
             });

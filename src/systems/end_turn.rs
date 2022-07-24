@@ -21,11 +21,19 @@ pub fn end_turn(ecs: &SubWorld, #[resource] turn_state: &mut TurnState, #[resour
         TurnState::PlayerTurn => TurnState::MonsterTurn,
         TurnState::MonsterTurn => TurnState::AwaitingInput,
         _ => current_state
-    };
+    };    
 
     player_hp.iter(ecs).for_each(|(hp, pos)| {
         if hp.current < 1 {
             println!("end_turn.rs changing to game over");
+            thread::spawn(|| {
+                let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+                let sink = Sink::try_new(&stream_handle).unwrap();
+                let file = BufReader::new(File::open("../resources/Player_Death_Scream.wav").unwrap());
+                let source = Decoder::new(file).unwrap();
+                sink.append(source);
+                sink.sleep_until_end();
+            });
             new_state = TurnState::GameOver;
         }
         if pos == amulet_pos {

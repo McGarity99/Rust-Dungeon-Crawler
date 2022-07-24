@@ -6,7 +6,6 @@ mod prefab;
 mod themes;
 
 use crate::prelude::*;
-use empty::EmptyArchitect;
 use rooms::RoomsArchitect;
 use automata::CellularAutomataArchitect;
 use drunkard::DrunkardWalkArchitect;

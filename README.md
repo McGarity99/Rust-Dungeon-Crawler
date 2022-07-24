@@ -37,3 +37,26 @@ serde = 1.0.115
 ron = 0.6.1
 rodio = 0.15.0
 
+## Attributions:
+General idea and foundational code: *Hands-on Rust* by Herbert Wolverson. Copyright 2021. The Pragmatic Programmers, LLC. Print. (ISBN: 978-1-68050-816-1)
+<br />
+#### Artwork:
+https://opengameart.org/content/unfinished-dungeon-tileset
+<br />
+https://opengameart.org/content/fantasy-magic-set
+<br />
+httpe://opengameart.org/content/fantasy-sword-set
+<br />
+http://opengameart.org/content/dungeon-crawl-32x32-tiles
+<br />
+
+#### Audio:
+https://opengameart.org/content/16-monster-growls
+<br />
+https://opengameart.org/content/monster-sound-effects-pack
+<br />
+https://opengameart.org/content/horror-sound-effects-library 
+(Little Robot Sound Factory: www.littlerobotsoundfactory.com)
+<br />
+https://opengameart.org/content/rpg-sound-pack
+

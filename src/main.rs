@@ -22,9 +22,9 @@ mod prelude {
     pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT / 2;
     pub const REG_FOV: i32 = 8; //represents the player's FOV starting radius
     pub const FOV_REDUC: i32 = 1;   //represents amount by which player's FOV radius is reduced by special enemies
-    pub const SCORE_STEAL_AMT: i32 = 50;
+    pub const SCORE_STEAL_AMT: i32 = 100;
     pub const MAX_LEVEL: u32 = 3;
-    pub const START_LEVEL: u32 = 0; //for debugging purposes (controls the theme the player starts in [0 Forest, 1 Dungeon, 2 Temple, 3 Volcano])
+    pub const START_LEVEL: u32 = 1; //for debugging purposes (controls the theme the player starts in [0 Forest, 1 Dungeon, 2 Temple, 3 Volcano])
     pub const POISON_DMG: i32 = 1;  //const representing damage dealt by poison floors
     pub const START_P_RESISTANCE: i32 = 2;  //amount of poison resistance the player starts the game with
     pub const MAX_P_RESISTANCE: i32 = 5;    //max poison resistance the player can have
@@ -46,6 +46,7 @@ struct State {
     input_systems: Schedule,
     player_systems: Schedule,
     monster_systems: Schedule,
+    player_dead: bool
     //overthemes: Vec<Sink>
 }
 
@@ -59,7 +60,6 @@ impl State {
         //spawn_amulet_of_yala(&mut ecs, map_builder.amulet_start);
         let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);
         map_builder.map.tiles[exit_idx] = TileType::Exit;
-        //println!("spawn points: {:?}", &map_builder.monster_spawns);
         spawn_level(
             &mut ecs,
             &mut rng,
@@ -71,24 +71,6 @@ impl State {
         resources.insert(Camera::new(map_builder.player_start));
         resources.insert(TurnState::AwaitingInput);
         resources.insert(map_builder.theme);
-
-        
-            /* let (_stream, stream_handle) = OutputStream::try_default().unwrap();
-            let file = File::open("../resources/Ambience_Forest.wav").unwrap();
-            let the_sink = stream_handle.play_once(BufReader::new(file)).unwrap();
-            the_sink.set_volume(0.5);
-            println!("started the_sink");
-            //thread::sleep(std::time::Duration::from_millis(100));
-            let mut sound_vec: Vec<Sink> = Vec::new();
-            sound_vec.push(the_sink);
-            /* match the_sink {
-                Ok(s) => {
-                    sound_vec.push(s);  //maintin the handle on the Sink playing the sound
-                },
-                _ => {}
-            } */
-            println!("sound_vec: {:?}", sound_vec.len()); */
-        
         
         Self { 
             ecs,
@@ -96,6 +78,7 @@ impl State {
             input_systems: build_input_scheduler(),
             player_systems: build_player_scheduler(),
             monster_systems: build_monster_scheduler(),
+            player_dead: false
             //overthemes: sound_vec
         }
     }
@@ -113,7 +96,7 @@ impl State {
             "Don't worry, you can always try again with a new hero");
         ctx.print_color_centered(9, GREEN, BLACK,
             "Press 1 to play again");
-        
+
         if let Some(VirtualKeyCode::Key1) = ctx.key {
             self.reset_game_state();
         }
@@ -134,6 +117,7 @@ impl State {
     fn reset_game_state(&mut self) {
         self.ecs = World::default();
         self.resources = Resources::default();
+        self.player_dead = false;
         let mut rng = RandomNumberGenerator::new();
         let mut map_builder = MapBuilder::new(&mut rng, 0);
         spawn_player(&mut self.ecs, map_builder.player_start);
@@ -293,6 +277,7 @@ impl GameState for State {
                 &mut self.ecs, &mut self.resources
             ),
             TurnState::GameOver => {
+                self.player_dead = true;
                 self.game_over(ctx);
             },
             TurnState::Victory => {

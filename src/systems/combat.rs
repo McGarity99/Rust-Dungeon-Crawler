@@ -17,6 +17,7 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
     let mut attackers = <(Entity, &WantsToAttack)>::query();
     let mut take_health = false;
     let mut health_damage = 0;
+    let mut rng = RandomNumberGenerator::new();
 
     /* let mut score_query = <&Score>::query().filter(component::<Player>());
     let mut player_score = score_query.iter(ecs).nth(0).unwrap(); */
@@ -110,6 +111,14 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                     if let Ok(score_steal) = ecs.clone().entry_mut(*attacker).unwrap().get_component::<StealsScore>() {
                         if let Ok(mut p_score) = ecs.clone().entry_mut(*victim).unwrap().get_component_mut::<Score>() {
                             p_score.current = i32::max(0, p_score.current - score_steal.amount);
+                            thread::spawn(|| {
+                                let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                                let sink = Sink::try_new(&stream_handle).unwrap();
+                                let file = BufReader::new(File::open("../resources/Score_Steal.wav").unwrap());
+                                let source = Decoder::new(file).unwrap();
+                                sink.append(source);
+                                sink.sleep_until_end();
+                            }); //if player's score is deducted by Visage, play the score steal sound
                         }   //get player's score and reduce it when fighting a Visage (with no armor)
                     }
                 }
@@ -117,6 +126,14 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                     if let Ok(fov) = ecs.clone().entry_mut(*victim).unwrap().get_component_mut::<FieldOfView>() {
                         if fov.radius > 5 {
                             fov.dec_fov();
+                            thread::spawn(|| {
+                                let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                                let sink = Sink::try_new(&stream_handle).unwrap();
+                                let file = BufReader::new(File::open("../resources/FOV_Down.wav").unwrap());
+                                let source = Decoder::new(file).unwrap();
+                                sink.append(source);
+                                sink.sleep_until_end();
+                            });
                         }   //do not allow player's FOV to slide below 4 tiles when fighting a Wraith (with no armor)
                     }
                 }
@@ -144,6 +161,60 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                             }
                         };
                 }
+                if let Ok(_reduces_fov) = ecs
+                .entry_mut(*victim)
+                .unwrap()
+                .get_component::<ReducesFOV>() 
+                {
+                    thread::spawn(|| {
+                        let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                        let sink = Sink::try_new(&stream_handle).unwrap();
+                        let file = BufReader::new(File::open("../resources/Wraith_Death.wav").unwrap());
+                        let source = Decoder::new(file).unwrap();
+                        sink.append(source);
+                        sink.sleep_until_end();
+                    });
+                } else if let Ok(_all_seeing) = ecs
+                    .entry_mut(*victim)
+                    .unwrap()
+                    .get_component::<AllSeeing>() 
+                    {
+                        match rng.range(0, 2) {
+                            0 => {
+                                thread::spawn(|| {
+                                    let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                                    let sink = Sink::try_new(&stream_handle).unwrap();
+                                    let file = BufReader::new(File::open("../resources/Okulos_Death_1.ogg").unwrap());
+                                    let source = Decoder::new(file).unwrap();
+                                    sink.append(source);
+                                    sink.sleep_until_end();
+                                });
+                            },
+                            _ => {
+                                thread::spawn(|| {
+                                    let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                                    let sink = Sink::try_new(&stream_handle).unwrap();
+                                    let file = BufReader::new(File::open("../resources/Okulos_Death_2.ogg").unwrap());
+                                    let source = Decoder::new(file).unwrap();
+                                    sink.append(source);
+                                    sink.sleep_until_end();
+                                });
+                            }
+                        }
+                    } else if let Ok(_ignores_armor) = ecs
+                        .entry_mut(*victim)
+                        .unwrap()
+                        .get_component::<IgnoresArmor>()
+                        {
+                            thread::spawn(|| {
+                                let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+                                let sink = Sink::try_new(&stream_handle).unwrap();
+                                let file = BufReader::new(File::open("../resources/Angel_Death.wav").unwrap());
+                                let source = Decoder::new(file).unwrap();
+                                sink.append(source);
+                                sink.sleep_until_end();
+                            });
+                        }
                 commands.remove(*victim);   //enemy is slain, so remove it from the game
             }
         }

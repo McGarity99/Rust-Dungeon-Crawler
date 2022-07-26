@@ -20,7 +20,6 @@ pub fn player_input(
     commands: &mut CommandBuffer,
     #[resource] key: &Option<VirtualKeyCode>,
     #[resource] turn_state: &mut TurnState,
-    #[resource] map: &mut Map
 ) {
     if let Some(key) = key {
         let mut players = <(Entity, &Point)>::query().filter(component::<Player>()); //only entities with a Point component and a Player tag component should be included in the query
@@ -47,7 +46,7 @@ pub fn player_input(
                 let mut fountain_locs = <(Entity, &FovItem, &Point, &ProvidesNVision)>::query();    //get all entities that have a FovItem & Point component
                 fountain_locs
                     .iter(ecs)
-                    .filter(|(_entity, _f_i, &pos, &p_n)| pos == player_pos)
+                    .filter(|(_entity, _f_i, &pos, &_p_n)| pos == player_pos)
                     .for_each(|(entity, _f_item, position, provides_nv)| {
                         println!("fountain at pos: {:?}", position);
                         picked_up_fountain = true;
@@ -59,8 +58,8 @@ pub fn player_input(
                 let mut gold_locs = <(Entity, &ScoreItem, &Point, &ProvidesScore)>::query();   //get all entities that have a ScoreItem & Point component
                 gold_locs
                     .iter(ecs)
-                    .filter(|(_entity, s_i, &pos, &p_s)| pos == player_pos)
-                    .for_each(|(entity, s_item, position, provides_score)| {
+                    .filter(|(_entity, _s_i, &pos, &_p_s)| pos == player_pos)
+                    .for_each(|(entity, _s_item, position, provides_score)| {
                         println!("gold at pos: {:?}", position);
                         picked_up_gold = true;
                         score_amt += provides_score.amount;
@@ -187,9 +186,9 @@ pub fn player_input(
             _ => Point::new(0, 0),
         };
 
-        let mut did_something = false;
+        
 
-        if delta.x != 0 || delta.y != 0 || !did_something {
+        if delta.x != 0 || delta.y != 0 {
 
             let (player_entity, destination) = players
                 .iter(ecs)
@@ -204,7 +203,6 @@ pub fn player_input(
                 .filter(|(_, pos)| **pos == destination)
                 .for_each(|(entity, _)| {
                     hit_something = true;
-                    did_something = true;
                     commands.push((
                         (),
                         WantsToAttack {
@@ -215,7 +213,6 @@ pub fn player_input(
                 });
 
             if !hit_something {
-                did_something = true;
                 commands.push((
                     (),
                     WantsToMove {

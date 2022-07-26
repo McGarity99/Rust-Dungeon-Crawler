@@ -15,7 +15,7 @@ The game was developed through the book *Hands-on Rust*, by Herbert Wolverson (I
 * [x] Poison floor / fire floor (could require special item to traverse safely) <br />
 ### Other Mechanics: <br />
 * [x] Add a scoring mechanism <br />
-* [ ] Add gameplay music and/or sound fx
+* [x] Add gameplay music and/or sound fx
 <br />
 
 ## Stretch Goals 

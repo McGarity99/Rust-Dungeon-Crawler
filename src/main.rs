@@ -12,10 +12,14 @@ mod prelude {
     pub use legion::world::SubWorld;
     pub use legion::systems::CommandBuffer;
     pub use std::fs::File;
+    pub use std::fs::OpenOptions;
     pub use std::io::BufReader;
+    pub use std::io::Read;
+    pub use std::io::Write;
     pub use std::thread;
     pub use rodio::{Decoder, OutputStream, Sink};
     pub use rodio::source::{SineWave, Source};
+    pub use std::path::Path;
     pub const SCREEN_WIDTH: i32 = 80;
     pub const SCREEN_HEIGHT: i32 = 50;
     pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH / 2;
@@ -24,11 +28,12 @@ mod prelude {
     pub const FOV_REDUC: i32 = 1;   //represents amount by which player's FOV radius is reduced by special enemies
     pub const SCORE_STEAL_AMT: i32 = 100;
     pub const MAX_LEVEL: u32 = 3;
-    pub const START_LEVEL: u32 = 1; //for debugging purposes (controls the theme the player starts in [0 Forest, 1 Dungeon, 2 Temple, 3 Volcano])
+    pub const START_LEVEL: u32 = 0; //for debugging purposes (controls the theme the player starts in [0 Forest, 1 Dungeon, 2 Temple, 3 Volcano])
     pub const POISON_DMG: i32 = 1;  //const representing damage dealt by poison floors
     pub const START_P_RESISTANCE: i32 = 2;  //amount of poison resistance the player starts the game with
     pub const MAX_P_RESISTANCE: i32 = 5;    //max poison resistance the player can have
     pub const HEALTH_WARN_THRESHOLD: i32 = 5;   //threshold below which the player will get an audio warning of low health
+    pub const SCORES_LOC: &str = "../scores/scores.txt";    //path of the scores file, change if needed
     pub use crate::map::*;
     pub use crate::map_builder::*;
     pub use crate::camera::*;
@@ -36,6 +41,7 @@ mod prelude {
     pub use crate::spawner::*;
     pub use crate::systems::*;
     pub use crate::turn_state::*;
+
 }
 
 use prelude::*;
@@ -47,7 +53,6 @@ struct State {
     player_systems: Schedule,
     monster_systems: Schedule,
     player_dead: bool
-    //overthemes: Vec<Sink>
 }
 
 impl State {
@@ -56,6 +61,8 @@ impl State {
         let mut resources = Resources::default();
         let mut rng = RandomNumberGenerator::new();
         let mut map_builder = MapBuilder::new(&mut rng, START_LEVEL as i32);
+        let player_final_score = 0i32;
+        let  score_message = String::new();
         spawn_player(&mut ecs, map_builder.player_start);
         //spawn_amulet_of_yala(&mut ecs, map_builder.amulet_start);
         let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);
@@ -71,6 +78,8 @@ impl State {
         resources.insert(Camera::new(map_builder.player_start));
         resources.insert(TurnState::AwaitingInput);
         resources.insert(map_builder.theme);
+        resources.insert(player_final_score);
+        resources.insert(score_message);
         
         Self { 
             ecs,
@@ -79,22 +88,35 @@ impl State {
             player_systems: build_player_scheduler(),
             monster_systems: build_monster_scheduler(),
             player_dead: false
-            //overthemes: sound_vec
         }
     }
 
     fn game_over(&mut self, ctx: &mut BTerm) {
+        let player_score: i32 = match self.resources.get::<i32>() {
+            Some(num) => *num,
+            None => 0
+        };
+        let score_line = format!("Final Score: {}", player_score);
+        let score_message: String = match self.resources.get::<String>() {
+            Some(msg) => msg.to_string(),
+            None => String::new()
+        };
+        let high_score_line = format!("{}", score_message);
         println!("entering game over");
         ctx.set_active_console(2);
         ctx.print_color_centered(2, RED, BLACK, "Your quest has ended");
         ctx.print_color_centered(4, WHITE, BLACK,
             "Slain by a monster, your hero's journey has come to a premature end");
-        ctx.print_color_centered(5, WHITE, BLACK,
+        ctx.print_color_centered(6, WHITE, BLACK,
             "The Tome of Anthrophulos remains unclaimed, and the city of Mharnem is consumed");
         
-        ctx.print_color_centered(8, YELLOW, BLACK,
+        ctx.print_color_centered(8, WHITE, BLACK,
             "Don't worry, you can always try again with a new hero");
-        ctx.print_color_centered(9, GREEN, BLACK,
+        ctx.print_color_centered(10, YELLOW, BLACK,
+            score_line.as_str());
+        ctx.print_color_centered(11, YELLOW, BLACK,
+            high_score_line.as_str());
+        ctx.print_color_centered(13, GREEN, BLACK,
             "Press 1 to play again");
 
         if let Some(VirtualKeyCode::Key1) = ctx.key {
@@ -103,11 +125,23 @@ impl State {
     }
 
     fn victory(&mut self, ctx: &mut BTerm) {
+        let player_score: i32 = match self.resources.get::<i32>() {
+            Some(num) => *num,
+            None => 0
+        };
+        let score_line = format!("Final Score: {:?}", player_score);
+        let score_message: String = match self.resources.get::<String>() {
+            Some(msg) => msg.to_string(),
+            None => String::new()
+        };
+        let high_score_line = format!("{}", score_message);
         ctx.set_active_console(2);
         ctx.print_color_centered(2, GREEN, BLACK, "You have won!");
         ctx.print_color_centered(4, WHITE, BLACK, "You put on the Amulet of Yala and feel its power");
-        ctx.print_color_centered(5, WHITE, BLACK, "Mharnem is saved, and you can return to your normal life");
-        ctx.print_color_centered(7, GREEN, BLACK, "Press 1 to play again");
+        ctx.print_color_centered(6, WHITE, BLACK, "Mharnem is saved, and you can return to your normal life");
+        ctx.print_color_centered(8, YELLOW, BLACK, score_line.as_str());
+        ctx.print_color_centered(9, YELLOW, BLACK, high_score_line.as_str());
+        ctx.print_color_centered(11, GREEN, BLACK, "Press 1 to play again");
 
         if let Some(VirtualKeyCode::Key1) = ctx.key {
             self.reset_game_state();
@@ -120,6 +154,8 @@ impl State {
         self.player_dead = false;
         let mut rng = RandomNumberGenerator::new();
         let mut map_builder = MapBuilder::new(&mut rng, 0);
+        let player_final_score = 0i32;
+        let score_message = String::new();
         spawn_player(&mut self.ecs, map_builder.player_start);
         //spawn_amulet_of_yala(&mut self.ecs, map_builder.amulet_start);
         let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);
@@ -135,15 +171,8 @@ impl State {
             self.resources.insert(Camera::new(map_builder.player_start));
             self.resources.insert(TurnState::AwaitingInput);
             self.resources.insert(map_builder.theme);
-
-            /* thread::spawn(|| {
-                let (_stream, stream_handle) = OutputStream::try_default().unwrap();
-                let sink = Sink::try_new(&stream_handle).unwrap();
-                let file = BufReader::new(File::open("../resources/Ambience_Forest.wav").unwrap());
-                let source = Decoder::new(file).unwrap();
-                sink.append(source);
-                //sink.sleep_until_end();
-            }); */
+            self.resources.insert(player_final_score);
+            self.resources.insert(score_message);
     }
 
     fn advance_level(&mut self) {
@@ -157,48 +186,6 @@ impl State {
         if let Ok(p_score) = self.ecs.entry_mut(player_entity).unwrap().get_component_mut::<Score>() {
             p_score.level_theme += 1;
             level_id = p_score.level_theme;
-            match level_id {
-                0 => {
-                    /* thread::spawn(|| {
-                        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
-                        let sink = Sink::try_new(&stream_handle).unwrap();
-                        let file = BufReader::new(File::open("../resources/Ambience_Forest.wav").unwrap());
-                        let source = Decoder::new(file).unwrap();
-                        sink.append(source);
-                        sink.sleep_until_end();
-                    }); */
-                },
-                1 => {
-                    /* thread::spawn(|| {
-                        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
-                        let sink = Sink::try_new(&stream_handle).unwrap();
-                        let file = BufReader::new(File::open("../resources/Ambience_Dungeon.wav").unwrap());
-                        let source = Decoder::new(file).unwrap();
-                        sink.append(source);
-                        sink.sleep_until_end();
-                    }); */
-                },
-                2 => {
-                    /* thread::spawn(|| {
-                        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
-                        let sink = Sink::try_new(&stream_handle).unwrap();
-                        let file = BufReader::new(File::open("../resources/Ambience_Temple.mp3").unwrap());
-                        let source = Decoder::new(file).unwrap();
-                        sink.append(source);
-                        sink.sleep_until_end();
-                    }); */
-                },
-                _ => {
-                    /* thread::spawn(|| {
-                        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
-                        let sink = Sink::try_new(&stream_handle).unwrap();
-                        let file = BufReader::new(File::open("../resources/Ambience_Hell_00.mp3").unwrap());
-                        let source = Decoder::new(file).unwrap();
-                        sink.append(source);
-                        sink.sleep_until_end();
-                    }); */
-                }
-            }
         }   //advance level id token to spawn correct level theme
             use std::collections::HashSet;
             let mut entities_to_keep = HashSet::new();

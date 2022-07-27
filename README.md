@@ -59,4 +59,7 @@ https://opengameart.org/content/horror-sound-effects-library
 https://opengameart.org/content/rpg-sound-pack
 <br />
 https://opengameart.org/content/win-sound-effect
+<br />
+#### Bitmap Editor:
+GIMP (https://www.gimp.org/)
 

@@ -11,7 +11,7 @@ pub fn spawn_player(ecs: &mut World, pos: Point) { //calling this function adds 
             pos,
             Render {
                 color: ColorPair::new(WHITE, BLACK),
-                glyph: to_cp437('@')
+                glyph: to_cp437('1')
             },
             Health {
                 current: 15,
@@ -34,13 +34,13 @@ pub fn spawn_player(ecs: &mut World, pos: Point) { //calling this function adds 
     );
 }
 
-pub fn spawn_amulet_of_yala(ecs: &mut World, pos: Point) {
+pub fn spawn_tome_of_anth(ecs: &mut World, pos: Point) {
     ecs.push(
-        (Item, AmuletOfYala,
+        (Item, TomeOfAnth,
             pos,
             Render {
                 color: ColorPair::new(WHITE, BLACK),
-                glyph: to_cp437('|')
+                glyph: to_cp437('w')
             },
             Name("Amulet of Yala".to_string()),
         )

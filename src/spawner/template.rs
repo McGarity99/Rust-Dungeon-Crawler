@@ -58,7 +58,6 @@ impl Templates {
             if let Some(entity) = rng.random_slice_entry(&available_entities) {
                 let idx = map.point2d_to_index(*pt);
                 if map.spawned_points.contains(&idx) == false {
-                    //println!("doesn't contain {}, pushing", idx);
                     map.spawned_points.push(idx);
                     self.spawn_entity(pt, entity, &mut commands, ecs);
                 }
@@ -99,23 +98,29 @@ impl Templates {
                 EntityType::Enemy => {
                     commands.add_component(entity, Enemy{});
                     commands.add_component(entity, FieldOfView::new(6));
+                    commands.add_component(entity, ChasingPlayer{});
+                    commands.add_component(entity, Health {
+                        current: template.hp.unwrap(),
+                        max: template.hp.unwrap()
+                    });
+                    if template.name.eq("Goblin") || template.name.eq("Orc") {
+                        commands.add_component(entity, SmallMonster{});
+                    }   //if Goblin or Orc, flag as small monster for death sounds (non-special enemies)
+                    if template.name.eq("Ogre") || template.name.eq("Ducephalon") {
+                        commands.add_component(entity, LargeMonster{});
+                    }   //if Ogre or Ducephalon, flag as large monster for death sounds (non-special enemies)
                     if template.name.eq("Visage") {
                         commands.add_component(entity, StealsScore{amount: SCORE_STEAL_AMT});
                     }   //allow the Visage to steal player's score when attacking
                     if template.name.eq("Okulos") {
                         commands.add_component(entity, AllSeeing{});
                     }   //allow Okulos to "see" the player from anywhere on the map
-                    commands.add_component(entity, ChasingPlayer{});
                     if template.name.eq("Fallen Angel") {
                         commands.add_component(entity, IgnoresArmor{});
                     }   //allow Fallen Angel enemy type to ignore player's armor
                     if template.name.eq("Wraith") {
                         commands.add_component(entity, ReducesFOV{});
                     }   //allow Wraith enemy type to reduce the player's FOV
-                    commands.add_component(entity, Health {
-                        current: template.hp.unwrap(),
-                        max: template.hp.unwrap()
-                    });
                 }
             }
 

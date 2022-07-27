@@ -64,8 +64,7 @@ impl State {
         let player_final_score = 0i32;
         let  score_message = String::new();
         spawn_player(&mut ecs, map_builder.player_start);
-        //spawn_amulet_of_yala(&mut ecs, map_builder.amulet_start);
-        let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);
+        let exit_idx = map_builder.map.point2d_to_index(map_builder.tome_start);
         map_builder.map.tiles[exit_idx] = TileType::Exit;
         spawn_level(
             &mut ecs,
@@ -76,7 +75,7 @@ impl State {
         );
         resources.insert(map_builder.map);
         resources.insert(Camera::new(map_builder.player_start));
-        resources.insert(TurnState::AwaitingInput);
+        resources.insert(TurnState::Intro);
         resources.insert(map_builder.theme);
         resources.insert(player_final_score);
         resources.insert(score_message);
@@ -101,8 +100,7 @@ impl State {
             Some(msg) => msg.to_string(),
             None => String::new()
         };
-        let high_score_line = format!("{}", score_message);
-        println!("entering game over");
+        let high_score_line = format!("{}", score_message); 
         ctx.set_active_console(2);
         ctx.print_color_centered(2, RED, BLACK, "Your quest has ended");
         ctx.print_color_centered(4, WHITE, BLACK,
@@ -137,16 +135,41 @@ impl State {
         let high_score_line = format!("{}", score_message);
         ctx.set_active_console(2);
         ctx.print_color_centered(2, GREEN, BLACK, "You have won!");
-        ctx.print_color_centered(4, WHITE, BLACK, "You put on the Amulet of Yala and feel its power");
-        ctx.print_color_centered(6, WHITE, BLACK, "Mharnem is saved, and you can return to your normal life");
-        ctx.print_color_centered(8, YELLOW, BLACK, score_line.as_str());
-        ctx.print_color_centered(9, YELLOW, BLACK, high_score_line.as_str());
-        ctx.print_color_centered(11, GREEN, BLACK, "Press 1 to play again");
+        ctx.print_color_centered(4, WHITE, BLACK, "You flip through the pages of this ancient tome and feel its power.");
+        ctx.print_color_centered(6, WHITE, BLACK, "Hopefully this book contains the knowledge you need to save Mharnem.");
+        ctx.print_color_centered(8, WHITE, BLACK, "Hopefully...");
+        ctx.print_color_centered(10, YELLOW, BLACK, score_line.as_str());
+        ctx.print_color_centered(11, YELLOW, BLACK, high_score_line.as_str());
+        ctx.print_color_centered(13, GREEN, BLACK, "Press 1 to play again");
 
         if let Some(VirtualKeyCode::Key1) = ctx.key {
             self.reset_game_state();
         }
     }
+
+    fn new_game(&mut self, ctx: &mut BTerm) {
+        ctx.set_active_console(2);
+        ctx.print_color_centered(2, GREEN, GRAY, "Sanctuary");
+        ctx.print_color_centered(4, WHITE, BLACK, "Your home city of Mharnem is beset by unnatural creatures.");
+        ctx.print_color_centered(6, WHITE, BLACK, "Your elders have prayed and sacrificed to the gods of earth, with no success.");
+        ctx.print_color_centered(8, WHITE, BLACK, "Desperate to stop these horrors, the townsfolk choose you by lottery to venture forth.");
+        ctx.print_color_centered(10, WHITE, BLACK, "You must brave the forsaken wood that surrounds the city, explore the desolate catacombs that lie beneath,");
+        ctx.print_color_centered(12, WHITE, BLACK, "and brace yourself for what lies below that. You are told to find the Tome of Anthrophulos.");
+        ctx.print_color_centered(14, WHITE, BLACK, "With this book of hidden knowledge written by a god, hopefully you can save Mharnem and appease the gods");
+        ctx.print_color_centered(16, WHITE, BLACK, "before you, your city, and your people are little more than a memory.");
+        ctx.print_color_centered(20, RED, BLACK, "CONTROLS:");
+        ctx.print_color_centered(22, RED, BLACK, "Use Arrow Keys to move");
+        ctx.print_color_centered(24, RED, BLACK, "Use 'G' to pickup items, [6, 7, 8, 9] to use items");
+        ctx.print_color_centered(26, RED, BLACK, "Avoid enemies, or move into them for combat");
+        ctx.print_color_centered(28, RED, BLACK, "Maintain your armor, and replenish it if needed");
+        ctx.print_color_centered(30, RED, BLACK, "Hover mouse over items/enemies for tooltips");
+
+        ctx.print_color_centered(34, WHITE, BLACK, "Press 1 to begin");
+
+        if let Some(VirtualKeyCode::Key1) = ctx.key {
+            self.reset_game_state();
+        }
+    }   //give player intro screen
 
     fn reset_game_state(&mut self) {
         self.ecs = World::default();
@@ -157,8 +180,7 @@ impl State {
         let player_final_score = 0i32;
         let score_message = String::new();
         spawn_player(&mut self.ecs, map_builder.player_start);
-        //spawn_amulet_of_yala(&mut self.ecs, map_builder.amulet_start);
-        let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);
+        let exit_idx = map_builder.map.point2d_to_index(map_builder.tome_start);
         map_builder.map.tiles[exit_idx] = TileType::Exit;
         spawn_level(
             &mut self.ecs,
@@ -224,12 +246,11 @@ impl State {
             );
 
             if map_level == MAX_LEVEL {
-                spawn_amulet_of_yala(&mut self.ecs, map_builder.amulet_start);
+                spawn_tome_of_anth(&mut self.ecs, map_builder.tome_start);
             } else {
-                let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);
+                let exit_idx = map_builder.map.point2d_to_index(map_builder.tome_start);
                 map_builder.map.tiles[exit_idx] = TileType::Exit;
-                println!("exit loc: {:?}", map_builder.amulet_start);
-            }   //spawn amulet for stairs depending on the map level
+            }   //spawn tome or stairs depending on the map level
 
             spawn_level(&mut self.ecs, &mut rng, map_level as usize, &map_builder.monster_spawns, &mut map_builder.map);
             self.resources.insert(map_builder.map);
@@ -272,6 +293,9 @@ impl GameState for State {
             },
             TurnState::NextLevel => {
                 self.advance_level();
+            },
+            TurnState::Intro => {
+                self.new_game(ctx);
             }
         }
         render_draw_buffer(ctx).expect("Render error");

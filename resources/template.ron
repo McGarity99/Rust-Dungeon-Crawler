@@ -26,13 +26,13 @@ Templates(
         ),
         Template(
             entity_type: Item,
-            name: "Light Armor Pickup", glyph: 'a', levels : [1, 2],
+            name: "Light Armor", glyph: 'a', levels : [1, 2],
             provides: Some([("Armor", 2)]),
             frequency: 1
         ),
         Template(
             entity_type: Item,
-            name: "Heavy Armor Pickup", glyph: 'Φ', levels : [0, 1],
+            name: "Heavy Armor", glyph: 'Φ', levels : [0],
             provides: Some([("Armor", 5)]),
             frequency: 1
         ),
@@ -86,7 +86,7 @@ Templates(
             hp: Some(3),
             frequency: 1,
             base_damage: Some(2),
-            provides: Some([("Score", 100)])
+            provides: Some([("Score", 25)])
         ),
         Template(
             entity_type: Enemy,
@@ -114,19 +114,19 @@ Templates(
         ),
         Template(
             entity_type: Item,
-            name: "Rusty Sword", glyph: 's', levels: [0, 1],
+            name: "Rusty Sword", glyph: 's', levels: [0],
             frequency: 1,
             base_damage: Some(1)
         ),
         Template(
             entity_type: Item,
-            name: "Superior Sword", glyph: 'S', levels: [0, 1, 2],
+            name: "Superior Sword", glyph: 'S', levels: [0, 1],
             frequency: 1,
             base_damage: Some(2)
         ),
         Template(
             entity_type: Item,
-            name: "Champion Sword", glyph: '/', levels: [1, 2],
+            name: "Champion Sword", glyph: '/', levels: [2],
             frequency: 1,
             base_damage: Some(3)
         )

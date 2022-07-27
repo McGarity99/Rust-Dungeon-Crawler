@@ -27,7 +27,7 @@ pub struct MapBuilder {
     pub rooms: Vec<Rect>,       //vec of rooms (rectangle shaped)
     pub monster_spawns: Vec<Point>,
     pub player_start: Point,    //location of player's start
-    pub amulet_start: Point,
+    pub tome_start: Point,
     pub theme: Box<dyn MapTheme>,
     //pub prefab_indices: Vec<usize>
 }
@@ -36,15 +36,12 @@ impl MapBuilder {
     pub fn new(rng: &mut RandomNumberGenerator, level_id: i32) -> Self {
         let mut architect: Box<dyn MapArchitect> = match rng.range(0,3) {
             0 => {
-                println!("DrunkardArchitect");
                 Box::new(DrunkardWalkArchitect{})
             },
             1 => {
-                println!("RoomsArchitect");
                 Box::new(RoomsArchitect{})
             },
             _ => {
-                println!("CellularAutomataArchitect");
                 Box::new(CellularAutomataArchitect{})
             }
         };

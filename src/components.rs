@@ -67,7 +67,7 @@ pub struct ScoreItem;
 pub struct FovItem;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-pub struct AmuletOfYala;
+pub struct TomeOfAnth;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct FieldOfView {
@@ -116,7 +116,6 @@ impl FieldOfView {
         self.visible_tiles = HashSet::new();
         self.radius -= FOV_REDUC;
         self.is_dirty = true;
-        println!("new fov: {}", self.radius);
     }
 }
 
@@ -187,3 +186,9 @@ pub struct LevelTheme(pub String);
 pub struct PoisonShield {
     pub amount: i32
 }
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct SmallMonster;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct LargeMonster;

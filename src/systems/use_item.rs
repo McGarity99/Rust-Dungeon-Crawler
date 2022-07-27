@@ -22,7 +22,6 @@ pub fn use_item(
     let mut poison_res_to_apply = Vec::<(Entity, i32)>::new();
     <(Entity, &ActivateItem)>::query().iter(ecs)
     .for_each(|(entity, activate)| {
-        //println!("activate: {:?}", activate);
         let item = ecs.entry_ref(activate.item);
         if let Ok(item) = item {
             if let Ok(healing) = item.get_component::<ProvidesHealing>() {
@@ -40,7 +39,6 @@ pub fn use_item(
                 }); //play map reveal sound
             }
             if let Ok(armor) = item.get_component::<ProvidesArmor>() {
-                //println!("armor to apply pushing: {}", armor.amount);
                 armor_to_apply.push((activate.used_by, armor.amount));
             }
             if let Ok(poison_res) = item.get_component::<ProvidesPoisonR>() {

@@ -133,7 +133,6 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
     let mut structure = ("", 0, 0);
     let mut placement = None;
     let mut attempts = 0;
-    println!("prefab.rs player_start: {:?}", mb.player_start);
 
     let d_map = DijkstraMap::new(
         SCREEN_WIDTH,
@@ -168,7 +167,7 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
             dimensions.for_each(|pt| {  //iterate every tile in the Rectangle via for_each
                 let idx = mb.map.point2d_to_index(pt);
                 let distance = d_map.map[idx];
-                if distance < 2000.0 && distance > 20.0 && mb.amulet_start != pt && mb.player_start != pt {  //if D map distance for the tile is < 2000.0, the tile is reachable (ensure prefab does not contain amulet spawn or player_start)
+                if distance < 2000.0 && distance > 20.0 && mb.tome_start != pt && mb.player_start != pt {  //if D map distance for the tile is < 2000.0, the tile is reachable (ensure prefab does not contain tome spawn or player_start)
                     can_place = true;
                 }
             });
@@ -188,9 +187,7 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
                 .collect();
             let mut i = 0;  //represents the current location in the prefab as we iterate through it
             for ty in placement.y .. placement.y + structure.2 { //iterate every tile the prefab will cover
-                //println!("current ty {}", ty);
                 for tx in placement.x .. placement.x + structure.1 {
-                    //println!("currrent tx {}", tx);
                     let idx = map_idx(tx, ty);
                     let c = string_vec[i];  //retrieve the character at position i from the string
                     match c {
@@ -210,12 +207,9 @@ pub fn apply_prefab(mb: &mut MapBuilder, rng: &mut RandomNumberGenerator) {
                         'D' => mb.map.tiles[idx] = TileType::Door,
                         _ => println!("No idea what to do with {}", c)
                     }
-                    //println!("row_n: {}, col_n: {}", row_num, col_num);
                     if (row_num > 0 && row_num < structure.2) && (col_num > 0 && col_num < structure.1) {
-                        //println!("prefab_indices pushing {}", idx);
                         mb.map.prefab_indices.push(idx);    //log given space as being "in-prefab", but only if it is not in first/last row or column
                     }
-                    //mb.map.prefab_indices.push(idx);    //log given space as being "in-prefab"
                     i += 1;
                     col_num += 1;   //increment the column number
                 }

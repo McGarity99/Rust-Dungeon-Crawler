@@ -13,6 +13,10 @@ use crate::prelude::*;
 #[read_component(Damage)]
 #[read_component(Carried)]
 #[write_component(FieldOfView)]
+#[read_component(SmallMonster)]
+#[read_component(LargeMonster)]
+#[read_component(AllSeeing)]
+#[read_component(StealsScore)]
 pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
     let mut attackers = <(Entity, &WantsToAttack)>::query();
     let mut take_health = false;
@@ -76,8 +80,6 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                     health_damage = final_damage;
                 }
             }
-        } else {
-            //println!("No armor component for victim: {:?}", victim);
         }
         if let Ok(mut health) = ecs.clone()
             .entry_mut(*victim)
@@ -161,63 +163,65 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                             }
                         };
                 }
-                if let Ok(_reduces_fov) = ecs
-                .entry_mut(*victim)
-                .unwrap()
-                .get_component::<ReducesFOV>() 
-                {
-                    thread::spawn(|| {
-                        let(_stream, stream_handle) = OutputStream::try_default().unwrap();
-                        let sink = Sink::try_new(&stream_handle).unwrap();
-                        let file = BufReader::new(File::open("../resources/Wraith_Death.wav").unwrap());
-                        let source = Decoder::new(file).unwrap();
-                        sink.append(source);
-                        sink.sleep_until_end();
-                    });
-                } else if let Ok(_all_seeing) = ecs
-                    .entry_mut(*victim)
-                    .unwrap()
-                    .get_component::<AllSeeing>() 
-                    {
-                        match rng.range(0, 2) {
-                            0 => {
-                                thread::spawn(|| {
-                                    let(_stream, stream_handle) = OutputStream::try_default().unwrap();
-                                    let sink = Sink::try_new(&stream_handle).unwrap();
-                                    let file = BufReader::new(File::open("../resources/Okulos_Death_1.ogg").unwrap());
-                                    let source = Decoder::new(file).unwrap();
-                                    sink.append(source);
-                                    sink.sleep_until_end();
-                                });
-                            },
-                            _ => {
-                                thread::spawn(|| {
-                                    let(_stream, stream_handle) = OutputStream::try_default().unwrap();
-                                    let sink = Sink::try_new(&stream_handle).unwrap();
-                                    let file = BufReader::new(File::open("../resources/Okulos_Death_2.ogg").unwrap());
-                                    let source = Decoder::new(file).unwrap();
-                                    sink.append(source);
-                                    sink.sleep_until_end();
-                                });
-                            }
+
+                if let Ok(_reduces_fov) = ecs.entry_mut(*victim).unwrap().get_component::<ReducesFOV>() {
+                    play_sound(String::from("../resources/Wraith_Death.wav"));
+                } else if let Ok(_all_seeing) = ecs.entry_mut(*victim).unwrap().get_component::<AllSeeing>() {
+                    match rng.range(0, 2) {
+                        0 => {
+                            play_sound(String::from("../resources/Okulos_Death_1.ogg"));
+                        },
+                        _ => {
+                            play_sound(String::from("../resources/Okulos_Death_2.ogg"));
                         }
-                    } else if let Ok(_ignores_armor) = ecs
-                        .entry_mut(*victim)
-                        .unwrap()
-                        .get_component::<IgnoresArmor>()
-                        {
-                            thread::spawn(|| {
-                                let(_stream, stream_handle) = OutputStream::try_default().unwrap();
-                                let sink = Sink::try_new(&stream_handle).unwrap();
-                                let file = BufReader::new(File::open("../resources/Angel_Death.wav").unwrap());
-                                let source = Decoder::new(file).unwrap();
-                                sink.append(source);
-                                sink.sleep_until_end();
-                            });
+                    }
+                } else if let Ok(_ignores_armor) = ecs.entry_mut(*victim).unwrap().get_component::<IgnoresArmor>() {
+                    play_sound(String::from("../resources/Angel_Death.wav"));
+                } else if let Ok(_steals) = ecs.entry_mut(*victim).unwrap().get_component::<StealsScore>() {
+                    play_sound(String::from("../resources/Visage_Death.wav"));
+                } else if let Ok(_small_monster) = ecs.entry_mut(*victim).unwrap().get_component::<SmallMonster>() {
+                    match rng.range(0, 3) {
+                        0 => {
+                            play_sound(String::from("../resources/Small_Monster_1.wav"));
+                        },
+                        1 => {
+                            play_sound(String::from("../resources/Small_Monster_2.wav"));
+                        },
+                        _ => {
+                            play_sound(String::from("../resources/Small_Monster_3.wav"));
                         }
+                    }
+                } else if let Ok(_large_monster) = ecs.entry_mut(*victim).unwrap().get_component::<LargeMonster>() {
+                    match rng.range(0, 3) {
+                        0 => {
+                            play_sound(String::from("../resources/Large_Monster_1.wav"));
+                        },
+                        1 => {
+                            play_sound(String::from("../resources/Large_Monster_2.wav"));
+                        },
+                        _ => {
+                            play_sound(String::from("../resources/Large_Monster_3.wav"));
+                        }
+                    }
+                }
                 commands.remove(*victim);   //enemy is slain, so remove it from the game
             }
         }
         commands.remove(*message);
     })
+}
+
+/*
+    This function is a helper function meant to handle the thread-spawning and sound-playing
+    for enemy death sounds, thus decreasing the bulk of the combat system function above.
+*/
+fn play_sound(path: String) {
+    thread::spawn(move || {
+        let(_stream, stream_handle) = OutputStream::try_default().unwrap();
+        let sink = Sink::try_new(&stream_handle).unwrap();
+        let file = BufReader::new(File::open(path.as_str()).unwrap());
+        let source = Decoder::new(file).unwrap();
+        sink.append(source);
+        sink.sleep_until_end();
+    });
 }

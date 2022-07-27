@@ -5,19 +5,20 @@ use crate::prelude::*;
 #[read_component(Player)]
 #[read_component(Point)]
 #[read_component(Score)]
-#[read_component(AmuletOfYala)]
+#[read_component(TomeOfAnth)]
 pub fn end_turn(ecs: &SubWorld, #[resource] turn_state: &mut TurnState, #[resource] map: &Map, #[resource] final_score: &mut i32, #[resource] score_message: &mut String) {
     let mut player_hp = <(&Health, &Point)>::query().filter(component::<Player>());
-    let mut amulet = <&Point>::query().filter(component::<AmuletOfYala>());
+    let mut tome = <&Point>::query().filter(component::<TomeOfAnth>());
 
-    let amulet_default = Point::new(-1, -1);
-    let amulet_pos = amulet
+    let tome_default = Point::new(-1, -1);
+    let tome_pos = tome
         .iter(ecs)
         .nth(0)
-        .unwrap_or(&amulet_default);
+        .unwrap_or(&tome_default);
 
     let current_state = turn_state.clone();
     let mut new_state = match current_state {
+        TurnState::Intro => TurnState::AwaitingInput,
         TurnState::AwaitingInput => return, //nothing to do
         TurnState::PlayerTurn => TurnState::MonsterTurn,
         TurnState::MonsterTurn => TurnState::AwaitingInput,
@@ -26,7 +27,6 @@ pub fn end_turn(ecs: &SubWorld, #[resource] turn_state: &mut TurnState, #[resour
 
     player_hp.iter(ecs).for_each(|(hp, pos)| {
         if hp.current < 1 {
-            println!("end_turn.rs changing to game over");
             thread::spawn(|| {
                 let (_stream, stream_handle) = OutputStream::try_default().unwrap();
                 let sink = Sink::try_new(&stream_handle).unwrap();
@@ -38,7 +38,7 @@ pub fn end_turn(ecs: &SubWorld, #[resource] turn_state: &mut TurnState, #[resour
             score_handle(&ecs.clone(), final_score, score_message);
             new_state = TurnState::GameOver;
         }
-        if pos == amulet_pos {
+        if pos == tome_pos {
             thread::spawn(|| {
                 let (_stream, stream_handle) = OutputStream::try_default().unwrap();
                 let sink = Sink::try_new(&stream_handle).unwrap();
@@ -104,7 +104,6 @@ fn score_handle(ecs: &SubWorld, final_score: &mut i32, score_message: &mut Strin
                             }   //notify of high score or not
 
                             *final_score = new_score;
-                            println!("final score set to : {}", final_score);
                             for score in scores_vec.iter() {
                                 let temp = score.to_string() + "\n";
                                 score_string.push_str(temp.as_str());

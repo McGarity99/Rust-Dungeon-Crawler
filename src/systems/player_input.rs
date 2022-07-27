@@ -32,6 +32,7 @@ pub fn player_input(
             VirtualKeyCode::G => {
                 let mut picked_up_gold = false; //flag for whether the player picked up gold or some other item
                 let mut picked_up_fountain = false; //flag for whether the player picked up a fountain or some other item
+                let mut picked_up_weapon = false;
                 let mut score_amt = 0i32;   //temp variable to store the amount added to the player's score from ScoreItem
                 let mut fov_amt = 0i32; //temp variable to store the amount added to the player's fov distance from FovItem
 
@@ -48,19 +49,25 @@ pub fn player_input(
                     .iter(ecs)
                     .filter(|(_entity, _f_i, &pos, &_p_n)| pos == player_pos)
                     .for_each(|(entity, _f_item, position, provides_nv)| {
-                        println!("fountain at pos: {:?}", position);
                         picked_up_fountain = true;
                         fov_amt += provides_nv.amount;
                         commands.remove_component::<Point>(*entity);
                     }); //iterate over all found entities, filter out all that are not at the same position as the Player
                         //for each matching entity, set the flag to true and remove it from the game world
+                
+                let mut weapon_locs = <(Entity, &Weapon, &Point)>::query();
+                weapon_locs
+                    .iter(ecs)
+                    .filter(|(_entity, _weapon, &pos)| pos == player_pos)
+                    .for_each(|(_entity, _weapon, _pos)| {
+                        picked_up_weapon = true;
+                    });
 
                 let mut gold_locs = <(Entity, &ScoreItem, &Point, &ProvidesScore)>::query();   //get all entities that have a ScoreItem & Point component
                 gold_locs
                     .iter(ecs)
                     .filter(|(_entity, _s_i, &pos, &_p_s)| pos == player_pos)
                     .for_each(|(entity, _s_item, position, provides_score)| {
-                        println!("gold at pos: {:?}", position);
                         picked_up_gold = true;
                         score_amt += provides_score.amount;
                         commands.remove_component::<Point>(*entity);
@@ -68,13 +75,11 @@ pub fn player_input(
                         //for each matching entity (max is 1), set the flag to true and remove it from the game world
 
                 if picked_up_fountain {
-                    println!("picked up fountain == true");
                     if let Ok(fov) = ecs.clone().entry_mut(*player_entity)
                         .unwrap()
                         .get_component_mut::<FieldOfView>()
                     {
                         fov.inc_fov();
-                        println!("fov radius: {}", fov.radius);
                         thread::spawn(|| {
                             let(_stream, stream_handle) = OutputStream::try_default().unwrap();
                             let sink = Sink::try_new(&stream_handle).unwrap();
@@ -83,8 +88,6 @@ pub fn player_input(
                             sink.append(source);
                             sink.sleep_until_end();
                         });
-                    } else {
-                        println!("{:?}", ecs.clone().entry_mut(*player_entity).unwrap().get_component_mut::<FieldOfView>());
                     }
                 }   //if the player picked up a Fountain of Foresight item, increase the radius of their FOV
 
@@ -111,10 +114,7 @@ pub fn player_input(
                         temp_count += 1;
                     });
 
-                    println!("carried items: {}", temp_count);
-
-                    if temp_count < 4 { //limits Player's inventory to 3 items maximum
-                        println!("less than 4, carrying item");
+                    if temp_count < 4 || picked_up_weapon { //limits Player's inventory to 4 items maximum
                         let (player, player_pos) = players
                             .iter(ecs)
                             .find_map(|(entity, pos)| Some((*entity, *pos)))
@@ -126,7 +126,6 @@ pub fn player_input(
                             .iter(ecs)
                             .filter(|(_entity, _item, &item_pos)| item_pos == player_pos)
                             .for_each(|(entity, _item, _item_pos)| {
-                                println!("adding Carried(player)");
                                 commands.remove_component::<Point>(*entity);
                                 commands.add_component(*entity, Carried(player));
 
@@ -163,24 +162,16 @@ pub fn player_input(
                 }
                 Point::new(0, 0)
             }
-            /* VirtualKeyCode::Key1 => use_item(0, ecs, commands),
-            VirtualKeyCode::Key2 => use_item(1, ecs, commands),
-            VirtualKeyCode::Key3 => use_item(2, ecs, commands),
-            VirtualKeyCode::Key4 => use_item(3, ecs, commands),
-            VirtualKeyCode::Key5 => use_item(4, ecs, commands), */
             VirtualKeyCode::Key6 => {
                 use_item(0, ecs, commands)
             }
             VirtualKeyCode::Key7 => {
-                //println!("using_item 6, ecs, commands");
                 use_item(1, ecs, commands)
             }
             VirtualKeyCode::Key8 => {
-                //println!("using_item 7, ecs, commands");
                 use_item(2, ecs, commands)
             }
             VirtualKeyCode::Key9 => {
-                //println!("using_item 8, ecs, commands");
                 use_item(3, ecs, commands)
             }
             _ => Point::new(0, 0),
@@ -245,7 +236,6 @@ fn use_item(n: usize, ecs: &mut SubWorld, commands: &mut CommandBuffer) -> Point
 
     if let Some(item_entity) = item_entity {
         //need if-let here because find_map could return None
-        //println!("commands pushing... ");
         commands.push((
             (),
             ActivateItem {

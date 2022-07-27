@@ -22,7 +22,7 @@ The game was developed through the book *Hands-on Rust*, by Herbert Wolverson (I
 If time permits, I would like to look into these more advanced concepts: <br />
 * [ ] Shift into real-time gameplay instead of turn-based <br />
 * [ ] Look into Bevy game engine for possible improvements to performance <br />
-* [ ] Add more detail to the game's story with an intro/outro screen <br />
+* [x] Add more detail to the game's story with an intro/outro screen <br />
 <br />
 
 ## Crates used:

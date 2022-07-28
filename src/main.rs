@@ -102,11 +102,11 @@ impl State {
         };
         let high_score_line = format!("{}", score_message); 
         ctx.set_active_console(2);
-        ctx.print_color_centered(2, RED, BLACK, "Your quest has ended");
+        ctx.print_color_centered(2, RED, BLACK, "Your quest has ended.");
         ctx.print_color_centered(4, WHITE, BLACK,
-            "Slain by a monster, your hero's journey has come to a premature end");
+            "Slain by a beast, your hero's journey has come to a premature end, and your people have no hope.");
         ctx.print_color_centered(6, WHITE, BLACK,
-            "The Tome of Anthrophulos remains unclaimed, and the city of Mharnem is consumed");
+            "The Tome of Anthrophulos remains unclaimed, and the city of Mharnem is consumed.");
         
         ctx.print_color_centered(8, WHITE, BLACK,
             "Don't worry, you can always try again with a new hero");
@@ -136,11 +136,23 @@ impl State {
         ctx.set_active_console(2);
         ctx.print_color_centered(2, GREEN, BLACK, "You have won!");
         ctx.print_color_centered(4, WHITE, BLACK, "You flip through the pages of this ancient tome and feel its power.");
-        ctx.print_color_centered(6, WHITE, BLACK, "Hopefully this book contains the knowledge you need to save Mharnem.");
-        ctx.print_color_centered(8, WHITE, BLACK, "Hopefully...");
-        ctx.print_color_centered(10, YELLOW, BLACK, score_line.as_str());
-        ctx.print_color_centered(11, YELLOW, BLACK, high_score_line.as_str());
-        ctx.print_color_centered(13, GREEN, BLACK, "Press 1 to play again");
+        ctx.print_color_centered(6, WHITE, BLACK, "The god of the lower realms does not take kindly to outsiders, so you decide not to hang around.");
+        ctx.print_color_centered(8, WHITE, BLACK, "You ecstatically hurry back the way you came, past lumbering and grotesque beasts, ancient ruins and archaic halls");
+        ctx.print_color_centered(10, WHITE, BLACK, "that are best left forgotten.");
+        ctx.print_color_centered(12, WHITE, BLACK, "When you reach the surface, you frantically run through the forest back in the direction of your");
+        ctx.print_color_centered(14, WHITE, BLACK, "forsaken city, in the direction of the wails of your people.");
+        ctx.print_color_centered(16, WHITE, BLACK, "Those monsters from below have completely overrun the streets of Mharnem.");
+        ctx.print_color_centered(18, WHITE, BLACK, "You fight your way to the city's Temple of Anthrophulos where most of the survivors wait, fearing you dead.");
+        ctx.print_color_centered(20, WHITE, BLACK, "Showing the Tome to the sole remaining priest, a ray of hope flashes in his eyes, and the eyes of all those present.");
+        ctx.print_color_centered(22, WHITE, BLACK, "Skimming some of the Tome's pages, the priest begins to utter a strange incantation in an unfamiliar tongue, but you recognize some of the names:");
+        ctx.print_color_centered(24, WHITE, BLACK, "Anthrophulos, Yenuma, Bathastu and Nodos. Suddenly, the abominable howls outside fall silent, and the townsfolk");
+        ctx.print_color_centered(26, WHITE, BLACK, "peer out from the safety of the temple, to see that all the horrors have seemingly vanished, and ray of light has broken through the dark clouds above.");
+        
+        ctx.print_color_centered(28, WHITE, BLACK, "Though not the first attack on the city of Mharnem, hopefully this is the last thanks to your bravery.");
+        ctx.print_color_centered(30, WHITE, BLACK, "Hopefully...");
+        ctx.print_color_centered(32, YELLOW, BLACK, score_line.as_str());
+        ctx.print_color_centered(34, YELLOW, BLACK, high_score_line.as_str());
+        ctx.print_color_centered(36, GREEN, BLACK, "Press 1 to play again");
 
         if let Some(VirtualKeyCode::Key1) = ctx.key {
             self.reset_game_state();
@@ -155,7 +167,7 @@ impl State {
         ctx.print_color_centered(8, WHITE, BLACK, "Desperate to stop these horrors, the townsfolk choose you by lottery to venture forth.");
         ctx.print_color_centered(10, WHITE, BLACK, "You must brave the forsaken wood that surrounds the city, explore the desolate catacombs that lie beneath,");
         ctx.print_color_centered(12, WHITE, BLACK, "and brace yourself for what lies below that. You are told to find the Tome of Anthrophulos.");
-        ctx.print_color_centered(14, WHITE, BLACK, "With this book of hidden knowledge written by a god, hopefully you can save Mharnem and appease the gods");
+        ctx.print_color_centered(14, WHITE, BLACK, "With this book of hidden knowledge written by the warden of man, hopefully you can save Mharnem and appease the gods of earth");
         ctx.print_color_centered(16, WHITE, BLACK, "before you, your city, and your people are little more than a memory.");
         ctx.print_color_centered(20, RED, BLACK, "CONTROLS:");
         ctx.print_color_centered(22, RED, BLACK, "Use Arrow Keys to move");
@@ -163,6 +175,8 @@ impl State {
         ctx.print_color_centered(26, RED, BLACK, "Avoid enemies, or move into them for combat");
         ctx.print_color_centered(28, RED, BLACK, "Maintain your armor, and replenish it if needed");
         ctx.print_color_centered(30, RED, BLACK, "Hover mouse over items/enemies for tooltips");
+        ctx.print_color_centered(32, RED, BLACK, "Poison floors will damage your health directly, so make sure you have some anti-poison handy");
+
 
         ctx.print_color_centered(34, WHITE, BLACK, "Press 1 to begin");
 
@@ -304,7 +318,7 @@ impl GameState for State {
 
 fn main() -> BError {
     let context = BTermBuilder::new()   //create generic terminal and specify attributes directly
-        .with_title("Catacomb Crawler")
+        .with_title("Sanctuary")
         .with_fps_cap(30.0)
         .with_dimensions(DISPLAY_WIDTH, DISPLAY_HEIGHT) //specify the size of subsequent consoles you add
         .with_tile_dimensions(32, 32)   //tile dimensions specifies the size of each character/object in the font file

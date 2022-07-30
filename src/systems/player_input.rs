@@ -48,7 +48,7 @@ pub fn player_input(
                 fountain_locs
                     .iter(ecs)
                     .filter(|(_entity, _f_i, &pos, &_p_n)| pos == player_pos)
-                    .for_each(|(entity, _f_item, position, provides_nv)| {
+                    .for_each(|(entity, _f_item, _position, provides_nv)| {
                         picked_up_fountain = true;
                         fov_amt += provides_nv.amount;
                         commands.remove_component::<Point>(*entity);
@@ -67,7 +67,7 @@ pub fn player_input(
                 gold_locs
                     .iter(ecs)
                     .filter(|(_entity, _s_i, &pos, &_p_s)| pos == player_pos)
-                    .for_each(|(entity, _s_item, position, provides_score)| {
+                    .for_each(|(entity, _s_item, _position, provides_score)| {
                         picked_up_gold = true;
                         score_amt += provides_score.amount;
                         commands.remove_component::<Point>(*entity);
@@ -177,8 +177,6 @@ pub fn player_input(
             _ => Point::new(0, 0),
         };
 
-        
-
         if delta.x != 0 || delta.y != 0 {
 
             let (player_entity, destination) = players
@@ -213,8 +211,6 @@ pub fn player_input(
                 ));
                 
             }
-
-            //*turn_state = TurnState::PlayerTurn;
         }
 
         *turn_state = TurnState::PlayerTurn;

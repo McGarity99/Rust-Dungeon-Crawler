@@ -115,5 +115,4 @@ pub fn hud(ecs: &SubWorld) {
         }
 
         draw_batch.submit(10000).expect("Batch error");
-    
 }

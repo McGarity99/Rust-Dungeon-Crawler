@@ -109,7 +109,7 @@ impl State {
             "The Tome of Anthrophulos remains unclaimed, and the city of Mharnem is consumed.");
         
         ctx.print_color_centered(8, WHITE, BLACK,
-            "Don't worry, you can always try again with a new hero");
+            "Don't worry, you can always try again with a new hero.");
         ctx.print_color_centered(10, YELLOW, BLACK,
             score_line.as_str());
         ctx.print_color_centered(11, YELLOW, BLACK,
@@ -327,7 +327,6 @@ fn main() -> BError {
         .with_font("terminal8x8.png", 8, 8)
         .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, "DungeonSpriteSheet.png")  //add a console using the specified dimensions and the named tile graphics file
         .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "DungeonSpriteSheet.png")    //add a second console with no background so transparency shows through it
-        //.with_sprite_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, 32)
         .with_simple_console_no_bg(SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, "terminal8x8.png")
         .build()?;
     main_loop(context, State::new())

@@ -41,7 +41,10 @@ impl MapArchitect for DrunkardWalkArchitect {
                 .iter() //iterate the D map results
                 .enumerate()    //use enumerate() to add a tile index to each entry in the iterator
                 .filter(|(_, distance)| *distance > &2000.0)    //use filter to retain values with a distance over 2000 tiles from the start point (inaccessible)
-                .for_each(|(idx, _)| mb.map.tiles[idx] = TileType::Wall);   //for each remaining entry in the iterator, convert it to a wall
+                .for_each(|(idx, _)| mb.map.tiles[idx] = match rng.range(0, 10) {
+                    0 => TileType::Decorative,
+                    _ => TileType::Wall       
+                });   //for each remaining entry in the iterator, convert it to a wall
         }
         mb.monster_spawns = mb.spawn_monsters(&center, rng);
         mb.player_start = center;

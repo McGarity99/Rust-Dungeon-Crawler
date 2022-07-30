@@ -23,9 +23,6 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
     let mut health_damage = 0;
     let mut rng = RandomNumberGenerator::new();
 
-    /* let mut score_query = <&Score>::query().filter(component::<Player>());
-    let mut player_score = score_query.iter(ecs).nth(0).unwrap(); */
-
     let victims: Vec<(Entity, Entity, Entity)> = attackers
         .iter(ecs)
         .map(|(entity, attack)| (*entity, attack.attacker, attack.victim))
@@ -86,8 +83,7 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
             .unwrap()
             .get_component_mut::<Health>()
         {
-            if is_player && take_health {
-                //if player is attacked (and no armor or broken armor)
+            if is_player && take_health {   //if player is attacked (and no armor or broken armor)
                 health.current -= health_damage;
                 thread::spawn(|| {
                     let(_stream, stream_handle) = OutputStream::try_default().unwrap();
@@ -139,8 +135,7 @@ pub fn combat(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                         }   //do not allow player's FOV to slide below 4 tiles when fighting a Wraith (with no armor)
                     }
                 }
-            } else if !is_player {
-                //if monster is attacked (apply player's final_damage)
+            } else if !is_player {  //if monster is attacked (apply player's final_damage)
                 health.current -= final_damage;
             }
             if health.current < 1 && !is_player {

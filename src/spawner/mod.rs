@@ -42,7 +42,7 @@ pub fn spawn_tome_of_anth(ecs: &mut World, pos: Point) {
                 color: ColorPair::new(WHITE, BLACK),
                 glyph: to_cp437('w')
             },
-            Name("Amulet of Yala".to_string()),
+            Name("Tome of Anthrophulos".to_string()),
         )
     );
 }

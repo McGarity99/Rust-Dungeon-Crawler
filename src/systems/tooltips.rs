@@ -12,15 +12,9 @@ pub fn tooltips(ecs: &SubWorld,
     #[resource] camera: &Camera //read-only access to the camera
 ) {
     let mut positions = <(Entity, &Point, &Name)>::query(); //returns the Entity and the Point & Name components from entites that have both of these components
-    //let mut fov = <&FieldOfView>::query().filter(component::<Player>());
-    //let player_fov = fov.iter(ecs).nth(0).unwrap();
 
     let offset = Point::new(camera.left_x, camera.top_y);
     let map_pos = *mouse_pos + offset;  //current position plus the left and top of the screen gives the screen position of an entity
-
-    /* positions
-        .iter(ecs)
-        .filter(|(_, pos, _)| **pos == map_pos && player_fov.visible_tiles.contains(&pos)); */
 
     let mut draw_batch = DrawBatch::new();
     draw_batch.target(2);

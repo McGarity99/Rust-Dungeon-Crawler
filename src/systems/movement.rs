@@ -13,8 +13,6 @@ pub fn movement(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer
 ) {
-    //let fov = <&FieldOfView>::query();
-
     if let Ok(entry) = ecs.entry_ref(want_move.entity) {
         if let Ok(fov) = entry.get_component::<FieldOfView>() {
             commands.add_component(want_move.entity, fov.clone_dirty());

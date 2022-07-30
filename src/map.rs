@@ -110,7 +110,6 @@ impl BaseMap for Map {
     fn is_opaque(&self, idx: usize) -> bool {
         self.tiles[idx as usize] != TileType::Floor &&  //FOV extends through Floor tiles
         self.tiles[idx as usize] != TileType::PoisonFloor   //FOV extends through PoisonFloor tiles
-        //self.tiles[idx as usize] != TileType::Door
     }
 }
 

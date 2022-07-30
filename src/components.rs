@@ -85,13 +85,6 @@ impl FieldOfView {
         }
     }
 
-    /* pub fn new_nv() -> Self {
-        Self { visible_tiles: HashSet::new(),
-            radius: NV_FOV,
-              is_dirty: true
-        }
-    } */
-
     pub fn clone_dirty(&self) -> Self {
         Self {
             visible_tiles: HashSet::new(),
@@ -99,12 +92,6 @@ impl FieldOfView {
             is_dirty: true
         }
     }
-
-    /* pub fn set_fov(&mut self) {
-        self.visible_tiles = HashSet::new();
-        self.radius = NV_FOV;
-        self.is_dirty = true;
-    } */
 
     pub fn inc_fov(&mut self) {
         self.visible_tiles = HashSet::new();

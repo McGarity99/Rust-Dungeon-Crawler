@@ -146,7 +146,7 @@ impl State {
         ctx.print_color_centered(20, WHITE, BLACK, "Showing the Tome to the sole remaining priest, a ray of hope flashes in his eyes, and the eyes of all those present.");
         ctx.print_color_centered(22, WHITE, BLACK, "Skimming some of the Tome's pages, the priest begins to utter a strange incantation in an unfamiliar tongue, but you recognize some of the names:");
         ctx.print_color_centered(24, WHITE, BLACK, "Anthrophulos, Yenuma, Bathastu and Nodos. Suddenly, the abominable howls outside fall silent, and the townsfolk");
-        ctx.print_color_centered(26, WHITE, BLACK, "peer out from the safety of the temple, to see that all the horrors have seemingly vanished, and ray of light has broken through the dark clouds above.");
+        ctx.print_color_centered(26, WHITE, BLACK, "peer out from the safety of the temple, to see that all the horrors have seemingly vanished, and a ray of light has broken through the dark clouds above.");
         
         ctx.print_color_centered(28, WHITE, BLACK, "Though not the first attack on the city of Mharnem, hopefully this is the last thanks to your bravery.");
         ctx.print_color_centered(30, WHITE, BLACK, "Hopefully...");

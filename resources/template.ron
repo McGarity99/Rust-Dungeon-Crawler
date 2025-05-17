@@ -14,7 +14,7 @@ Templates(
         ),
         Template(
             entity_type: Item,
-            name: "Dungeon Map", glyph: '{', levels : [0],
+            name: "Dungeon Map", glyph: '{', levels : [0, 1],
             provides: Some([("MagicMap", 0)]),
             frequency: 1
         ),
@@ -26,7 +26,7 @@ Templates(
         ),
         Template(
             entity_type: Item,
-            name: "Light Armor", glyph: 'a', levels : [1, 2],
+            name: "Light Armor", glyph: 'a', levels : [1, 2, 3],
             provides: Some([("Armor", 2)]),
             frequency: 1
         ),
@@ -44,7 +44,7 @@ Templates(
         ),
         Template(
             entity_type: Score,
-            name: "Treasure Medallion", glyph: '&', levels : [0, 1, 2],
+            name: "Treasure Medallion", glyph: '&', levels : [0, 1, 2, 3],
             provides: Some([("Score", 100)]),
             frequency: 1
         ),
